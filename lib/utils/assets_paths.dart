@@ -21,5 +21,9 @@ abstract class AppIcons {
     reflection,
     pos_anchors,
     settings,
+    settings,
+    settings,
+    settings,
+    settings,
   ];
 }
