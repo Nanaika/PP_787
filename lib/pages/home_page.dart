@@ -1,11 +1,10 @@
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
-import 'package:PP_787/utils/assets_paths.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-
+import '../utils/assets_paths.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -34,21 +33,50 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 32,),
+          SizedBox(
+            height: 32,
+          ),
+          // Expanded(
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 20),
+          //     child: GridView.builder(
+          //       padding: EdgeInsets.zero,
+          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //         crossAxisCount: 2,
+          //         childAspectRatio: 1,
+          //         mainAxisSpacing: 16,
+          //         crossAxisSpacing: 16,
+          //       ),
+          //       itemCount: AppIcons.mainPageIcons.length,
+          //       itemBuilder: (context, index) {
+          //         return MainCategoryTile(assetPath: AppIcons.mainPageIcons[index], text: AppConstants.mainCategories[index],);
+          //       },
+          //     ),
+          //   ),
+          // ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: List.generate(3, (index) {
+                    print('INDEX -----  ${index}');
+                    print('INDEX ~ -----  ${index ~/ 2}');
+                    if(index % 2 != 0) {
+                      return SizedBox(width: 16,);
+                    }
+                    return Column(
+                      children: List.generate(5, (innerIndex) {
+                        print('inner INDEX -----  ${innerIndex}');
+                        print('inner INDEX ~ -----  ${innerIndex ~/ 2}');
+                        if(innerIndex % 2 != 0) {
+                          return SizedBox(height: 16,);
+                        }
+                        return MainCategoryTile(assetPath: AppIcons.mainPageIcons[(index ~/ 2) + innerIndex], text: AppConstants.mainCategories[(index ~/ 2) + innerIndex]);
+                      }),
+                    );
+                  }),
                 ),
-                itemCount: AppIcons.mainPageIcons.length,
-                itemBuilder: (context, index) {
-                  return MainCategoryTile(assetPath: AppIcons.mainPageIcons[index], text: AppConstants.mainCategories[index],);
-                },
               ),
             ),
           ),
@@ -60,35 +88,44 @@ class HomePage extends StatelessWidget {
 
 class MainCategoryTile extends StatelessWidget {
   const MainCategoryTile({
-    super.key, required this.assetPath, required this.text, this.isOn = true,
+    super.key,
+    required this.assetPath,
+    required this.text,
+    this.isOn = true,
   });
+
   final String assetPath;
   final String text;
   final bool isOn;
+
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 16,
-                  color: AppColors.black.withOpacity(0.1)
-                ),
-              ],
-              color: isOn ? AppColors.surface : AppColors.secondary,
-              borderRadius: BorderRadius.circular(32.0),
-            ),
-            child: SvgPicture.asset(assetPath),
+    return Column(
+      children: [
+        Container(
+          width: (MediaQuery.of(context).size.width - 16 - 40) / 2,
+          height: (MediaQuery.of(context).size.width - 16 - 40) / 2,
+          padding: EdgeInsets.all(32),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(offset: Offset(0, 4), blurRadius: 16, color: AppColors.black.withOpacity(0.1)),
+            ],
+            color: isOn ? AppColors.surface : AppColors.secondary,
+            borderRadius: BorderRadius.circular(32.0),
           ),
-          SizedBox(height: 8,),
-          Text(text, style: AppStyles.bodyMedium,)
-        ],
-      ),
+          child: SvgPicture.asset(
+            assetPath,
+            fit: BoxFit.none,
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          text,
+          style: AppStyles.bodyMedium,
+        )
+      ],
     );
   }
 }
