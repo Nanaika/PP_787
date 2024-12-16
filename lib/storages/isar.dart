@@ -1,4 +1,5 @@
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/trigger.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -9,7 +10,7 @@ abstract class AppIsarDatabase {
   static Future<Isar> init() async {
     final dir = await getApplicationDocumentsDirectory();
     return _instance = await Isar.open(
-      [AnchorSchema],
+      [AnchorSchema, TriggerSchema],
       directory: dir.path,
     );
   }
@@ -24,21 +25,28 @@ abstract class AppIsarDatabase {
     );
   }
 
-  // static Future<void> addMood(Mood mood) async {
-  //   print('OLDMOOD ID---------------  ${mood.id}');
-  //   await _instance.writeTxn(() async => await _instance.moods.put(mood));
-  // }
-  //
-  // static Future<void> updateMood(Mood mood, int id) async {
-  //   final old = await _instance.moods.get(id);
-  //   if (old != null) {
-  //     old.type = mood.type;
-  //     old.reasons = mood.reasons;
-  //     old.comment = mood.comment;
-  //
-  //     await _instance.writeTxn(() async => await _instance.moods.put(old));
-  //   }
-  // }
+  static Future<void> addTrigger(Trigger trigger) async {
+    await _instance.writeTxn(() async => await _instance.triggers.put(trigger));
+  }
+
+  static Future<List<Trigger>> getTriggers() async {
+    return await _instance.writeTxn(
+          () async => await _instance.triggers.where().findAll(),
+    );
+  }
+
+
+  static Future<void> updateEmotions(List<Emotion> emotions, int id) async {
+    final old = await _instance.triggers.get(id);
+    print('OLD ------id---${old?.id}--------${old?.emotions.length}');
+    if (old != null) {
+      print('lllll-----------------  ${emotions.length}');
+      old.emotions = emotions;
+      print('lllll-----------------  ${old.emotions.length}');
+      await _instance.writeTxn(() async => await _instance.triggers.put(old));
+    }
+  }
+
   //
   // static Future<List<Mood>> getMoods() async {
   //   return await _instance.writeTxn(

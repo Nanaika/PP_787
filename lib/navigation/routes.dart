@@ -5,4 +5,8 @@ abstract class AppRoutes {
   static const settings = '/settings';
   static const anchor = '/anchor';
   static const addAnchor = '/addAnchor';
+  static const trigger = '/trigger';
+  static const addTrigger = '/addTrigger';
+  static const editTrigger = '/editTrigger';
+  static const addEmotion = '/addEmotion';
 }

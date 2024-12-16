@@ -1,13 +1,15 @@
 import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/trigger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../storages/isar.dart';
 
 class EmotionsBloc extends Cubit<EmotionsState> {
-  EmotionsBloc() : super(EmotionsState(anchors: [])) {
+  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [])) {
     getAnchors();
+    getTriggers();
   }
 
   Future<void> getAnchors() async {
@@ -23,6 +25,26 @@ class EmotionsBloc extends Cubit<EmotionsState> {
   Future<void> addAnchor(Anchor anchor) async {
     await AppIsarDatabase.addAnchor(anchor);
     await getAnchors();
+  }
+
+  Future updateEmotions(int id, List<Emotion> emotions) async {
+    await AppIsarDatabase.updateEmotions(emotions, id);
+    getTriggers();
+  }
+
+  Future<void> getTriggers() async {
+    final triggers = await AppIsarDatabase.getTriggers(
+    );
+    emit(
+      state.copyWith(
+        triggers: triggers,
+      ),
+    );
+  }
+
+  Future<void> addTrigger(Trigger trigger) async {
+    await AppIsarDatabase.addTrigger(trigger);
+    await getTriggers();
   }
 
   // Future<void> addMood(Mood mood) async {

@@ -63,6 +63,11 @@ class HomePage extends StatelessWidget {
                             text: AppConstants.mainCategories[(index ~/ 2) + innerIndex],
                             onTap: () {
                               switch ((index ~/ 2) + innerIndex) {
+                                case 2:
+                                  {
+                                    Navigator.of(context).pushNamed(AppRoutes.trigger);
+                                    break;
+                                  }
                                 case 4:
                                   {
                                     Navigator.of(context).pushNamed(AppRoutes.anchor);

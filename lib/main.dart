@@ -1,10 +1,14 @@
 import 'package:PP_787/bloc/emotions_bloc.dart';
 import 'package:PP_787/pages/add_anchor_page.dart';
+import 'package:PP_787/pages/add_emotion_page.dart';
+import 'package:PP_787/pages/add_trigger_page.dart';
 import 'package:PP_787/pages/anchor_page.dart';
+import 'package:PP_787/pages/edit_trigger_page.dart';
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/pages/onboarding_page.dart';
 import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/pages/splash_page.dart';
+import 'package:PP_787/pages/trigger_page.dart';
 import 'package:PP_787/remote_config.dart';
 import 'package:PP_787/storages/isar.dart';
 import 'package:PP_787/storages/shared_preferences.dart';
@@ -89,6 +93,22 @@ class MyApp extends StatelessWidget {
           AppRoutes.addAnchor => CupertinoPageRoute(
             settings: settings,
             builder: (context) => const AddAnchorPage(),
+          ),
+          AppRoutes.trigger => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const TriggerPage(),
+          ),
+          AppRoutes.addTrigger => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const AddTriggerPage(),
+          ),
+          AppRoutes.editTrigger => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const EditTriggerPage(),
+          ),
+          AppRoutes.addEmotion => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const AddEmotionPage(),
           ),
 
           _ => null,
