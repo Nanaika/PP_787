@@ -1,3 +1,4 @@
+import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/utils/constants.dart';
@@ -51,16 +52,31 @@ class HomePage extends StatelessWidget {
                       bottom: true,
                       top: false,
                       child: Column(
-                        children: List.generate(7, (innerIndex) {
+                        children: List.generate(5, (innerIndex) {
                           if (innerIndex % 2 != 0) {
                             return SizedBox(
                               height: 16,
                             );
                           }
+                          return CategoryTile(
+                            assetPath: AppIcons.mainPageIcons[(index ~/ 2) + innerIndex],
+                            text: AppConstants.mainCategories[(index ~/ 2) + innerIndex],
+                            onTap: () {
+                              switch ((index ~/ 2) + innerIndex) {
+                                case 4:
+                                  {
+                                    Navigator.of(context).pushNamed(AppRoutes.anchor);
+                                    break;
+                                  }
+                                case 5:
+                                  {
+                                    Navigator.of(context).pushNamed(AppRoutes.settings);
+                                    break;
+                                  }
 
-                          return MainCategoryTile(
-                              assetPath: AppIcons.mainPageIcons[(index ~/ 2) + innerIndex],
-                              text: AppConstants.mainCategories[(index ~/ 2) + innerIndex]);
+                              }
+                            },
+                          );
                         }),
                       ),
                     );
@@ -75,47 +91,56 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class MainCategoryTile extends StatelessWidget {
-  const MainCategoryTile({
+class CategoryTile extends StatelessWidget {
+  const CategoryTile({
     super.key,
     required this.assetPath,
     required this.text,
     this.isOn = true,
+    this.onTap,
   });
 
   final String assetPath;
   final String text;
   final bool isOn;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      child: Column(
-        children: [
-          Container(
-            width: (MediaQuery.of(context).size.width - 16 - 40) / 2,
-            height: (MediaQuery.of(context).size.width - 16 - 40) / 2,
-            padding: EdgeInsets.all(32),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(offset: Offset(0, 4), blurRadius: 16, color: AppColors.black.withOpacity(0.1)),
-              ],
-              color: isOn ? AppColors.surface : AppColors.secondary,
-              borderRadius: BorderRadius.circular(32.0),
+    return GestureDetector(
+      onTap: onTap,
+      child: FittedBox(
+        child: Column(
+          children: [
+            Container(
+              width: (MediaQuery.of(context).size.width - 16 - 40) / 2,
+              height: (MediaQuery.of(context).size.width - 16 - 40) / 2,
+              padding: EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 4),
+                    blurRadius: 16,
+                    color: AppColors.black.withOpacity(0.1),
+                  ),
+                ],
+                color: isOn ? AppColors.surface : AppColors.secondary,
+                borderRadius: BorderRadius.circular(32.0),
+              ),
+              child: SvgPicture.asset(
+                assetPath,
+                fit: BoxFit.scaleDown,
+              ),
             ),
-            child: SvgPicture.asset(
-              assetPath,
-              fit: BoxFit.none,
+            SizedBox(
+              height: 8,
             ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            text,
-            style: AppStyles.bodyMedium,
-          )
-        ],
+            Text(
+              text,
+              style: AppStyles.bodyMedium,
+            )
+          ],
+        ),
       ),
     );
   }

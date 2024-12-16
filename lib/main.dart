@@ -1,5 +1,9 @@
+import 'package:PP_787/bloc/emotions_bloc.dart';
+import 'package:PP_787/pages/add_anchor_page.dart';
+import 'package:PP_787/pages/anchor_page.dart';
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/pages/onboarding_page.dart';
+import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/pages/splash_page.dart';
 import 'package:PP_787/remote_config.dart';
 import 'package:PP_787/storages/isar.dart';
@@ -7,6 +11,7 @@ import 'package:PP_787/storages/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_app_info/flutter_app_info.dart';
 
@@ -49,30 +54,49 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      onUnknownRoute: (settings) => CupertinoPageRoute(
-        builder: (context) => const HomePage(),
-      ),
-      onGenerateRoute: (settings) => switch (settings.name) {
-        AppRoutes.onBoarding => CupertinoPageRoute(
-          settings: settings,
-          builder: (context) => const OnboardingPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => EmotionsBloc(),
         ),
-        AppRoutes.home => CupertinoPageRoute(
-          settings: settings,
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        onUnknownRoute: (settings) => CupertinoPageRoute(
           builder: (context) => const HomePage(),
         ),
+        onGenerateRoute: (settings) => switch (settings.name) {
+          AppRoutes.onBoarding => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const OnboardingPage(),
+          ),
+          AppRoutes.home => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const HomePage(),
+          ),
+          AppRoutes.settings => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const SettingsPage(),
+          ),
+          AppRoutes.anchor => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const AnchorPage(),
+          ),
+          AppRoutes.addAnchor => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const AddAnchorPage(),
+          ),
 
-        _ => null,
-      },
-      home: SplashPage(
-      isFirstRun: isFirstRun,
-    ),);
+          _ => null,
+        },
+        home: SplashPage(
+        isFirstRun: isFirstRun,
+      ),),
+    );
   }
 }
 

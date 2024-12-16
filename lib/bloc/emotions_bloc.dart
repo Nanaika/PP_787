@@ -1,0 +1,124 @@
+import 'package:PP_787/bloc/emotions_state.dart';
+import 'package:PP_787/storages/models/anchor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../storages/isar.dart';
+
+class EmotionsBloc extends Cubit<EmotionsState> {
+  EmotionsBloc() : super(EmotionsState(anchors: [])) {
+    getAnchors();
+  }
+
+  Future<void> getAnchors() async {
+    final anchors = await AppIsarDatabase.getAnchors(
+    );
+    emit(
+      state.copyWith(
+        anchors: anchors,
+      ),
+    );
+  }
+
+  Future<void> addAnchor(Anchor anchor) async {
+    await AppIsarDatabase.addAnchor(anchor);
+    await getAnchors();
+  }
+
+  // Future<void> addMood(Mood mood) async {
+  //   print('ADD MOOD from BLOC ----------------  ${mood.id}');
+  //   await AppIsarDatabase.addMood(mood);
+  //   await getMoods();
+  //
+  // }
+  //
+  // Future<void> updateMood(Mood mood, int id) async {
+  //   await AppIsarDatabase.updateMood(mood, id);
+  //   await getMoods();
+  //
+  // }
+  //
+  // Future<void> getMoods() async {
+  //   final moods = await AppIsarDatabase.getMoods(
+  //   );
+  //   emit(
+  //     state.copyWith(
+  //       moods: moods,
+  //     ),
+  //   );
+  // }
+
+
+  //
+  // Future<void> deleteTask(int id) async {
+  //   await AppIsarDatabase.deleteTask(id);
+  //   await getTasks();
+  // }
+  //
+  // Future<void> updateTask(int id, TaskState task) async {
+  //   await AppIsarDatabase.updateTask(id, task.toIsarModel());
+  //   await getTasks();
+  // }
+  //
+
+
+  //
+  // Future<void> updateTaskType(int index) async {
+  //   emit(state.copyWith(taskType: index));
+  //   await getTasks();
+  // }
+  //
+  // Future<void> updateTaskDaily(bool value) async {
+  //   emit(state.copyWith(taskDaily: value));
+  //   await getTasks();
+  // }
+  //
+  // Future<void> getGoals() async {
+  //   final goals = await AppIsarDatabase.getGoals();
+  //   emit(
+  //     state.copyWith(
+  //       goals: goals.reversed.map((e) => GoalState.fromIsarModel(e)).toList(),
+  //     ),
+  //   );
+  // }
+  //
+  // Future<void> addGoal(GoalState goal) async {
+  //   await AppIsarDatabase.addGoal(goal.toIsarModel());
+  //   await getGoals();
+  // }
+  //
+  // Future<void> deleteGoal(int id) async {
+  //   await AppIsarDatabase.deleteGoal(id);
+  //   await getGoals();
+  // }
+  //
+  // Future<void> updateGoal(int id, GoalState goal) async {
+  //   await AppIsarDatabase.updateGoal(id, goal.toIsarModel());
+  //   await getGoals();
+  // }
+  //
+  // Future<void> getHabits() async {
+  //   final habits = await AppIsarDatabase.getHabits();
+  //   emit(
+  //     state.copyWith(
+  //       habits:
+  //           habits.reversed.map((e) => HabitState.fromIsarModel(e)).toList(),
+  //     ),
+  //   );
+  // }
+  //
+  // Future<void> addHabit(HabitState habit) async {
+  //   await AppIsarDatabase.addHabit(habit.toIsarModel());
+  //   await getHabits();
+  // }
+  //
+  // Future<void> deleteHabit(int id) async {
+  //   await AppIsarDatabase.deleteHabit(id);
+  //   await getHabits();
+  // }
+  //
+  // Future<void> updateHabit(int id, HabitState habit) async {
+  //   await AppIsarDatabase.updateHabit(id, habit.toIsarModel());
+  //   await getHabits();
+  // }
+}

@@ -17,20 +17,16 @@ const TriggerSchema = CollectionSchema(
   name: r'Trigger',
   id: 3731394540989434652,
   properties: {
-    r'comment': PropertySchema(
+    r'emotions': PropertySchema(
       id: 0,
-      name: r'comment',
-      type: IsarType.string,
+      name: r'emotions',
+      type: IsarType.objectList,
+      target: r'Emotion',
     ),
     r'name': PropertySchema(
       id: 1,
       name: r'name',
       type: IsarType.string,
-    ),
-    r'triggers': PropertySchema(
-      id: 2,
-      name: r'triggers',
-      type: IsarType.stringList,
     )
   },
   estimateSize: _triggerEstimateSize,
@@ -40,7 +36,7 @@ const TriggerSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {},
+  embeddedSchemas: {r'Emotion': EmotionSchema},
   getId: _triggerGetId,
   getLinks: _triggerGetLinks,
   attach: _triggerAttach,
@@ -53,15 +49,15 @@ int _triggerEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.comment.length * 3;
-  bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.triggers.length * 3;
+  bytesCount += 3 + object.emotions.length * 3;
   {
-    for (var i = 0; i < object.triggers.length; i++) {
-      final value = object.triggers[i];
-      bytesCount += value.length * 3;
+    final offsets = allOffsets[Emotion]!;
+    for (var i = 0; i < object.emotions.length; i++) {
+      final value = object.emotions[i];
+      bytesCount += EmotionSchema.estimateSize(value, offsets, allOffsets);
     }
   }
+  bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
 
@@ -71,9 +67,13 @@ void _triggerSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.comment);
+  writer.writeObjectList<Emotion>(
+    offsets[0],
+    allOffsets,
+    EmotionSchema.serialize,
+    object.emotions,
+  );
   writer.writeString(offsets[1], object.name);
-  writer.writeStringList(offsets[2], object.triggers);
 }
 
 Trigger _triggerDeserialize(
@@ -83,9 +83,14 @@ Trigger _triggerDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Trigger(
-    comment: reader.readStringOrNull(offsets[0]) ?? '',
+    emotions: reader.readObjectList<Emotion>(
+          offsets[0],
+          EmotionSchema.deserialize,
+          allOffsets,
+          Emotion(),
+        ) ??
+        [],
     name: reader.readString(offsets[1]),
-    triggers: reader.readStringList(offsets[2]) ?? [],
   );
   object.id = id;
   return object;
@@ -99,11 +104,15 @@ P _triggerDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset) ?? '') as P;
+      return (reader.readObjectList<Emotion>(
+            offset,
+            EmotionSchema.deserialize,
+            allOffsets,
+            Emotion(),
+          ) ??
+          []) as P;
     case 1:
       return (reader.readString(offset)) as P;
-    case 2:
-      return (reader.readStringList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -198,133 +207,88 @@ extension TriggerQueryWhere on QueryBuilder<Trigger, Trigger, QWhereClause> {
 
 extension TriggerQueryFilter
     on QueryBuilder<Trigger, Trigger, QFilterCondition> {
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsLengthEqualTo(
+      int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.listLength(
+        r'emotions',
+        length,
+        true,
+        length,
+        true,
+      );
     });
   }
 
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentGreaterThan(
-    String value, {
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'emotions',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'emotions',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsLengthLessThan(
+    int length, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.listLength(
+        r'emotions',
+        0,
+        true,
+        length,
+        include,
+      );
     });
   }
 
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentLessThan(
-    String value, {
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
+      emotionsLengthGreaterThan(
+    int length, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.listLength(
+        r'emotions',
+        length,
+        include,
+        999999,
+        true,
+      );
     });
   }
 
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsLengthBetween(
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'comment',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'comment',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'comment',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'comment',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> commentIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'comment',
-        value: '',
-      ));
+      return query.listLength(
+        r'emotions',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -509,246 +473,22 @@ extension TriggerQueryFilter
       ));
     });
   }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
-      triggersElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'triggers',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
-      triggersElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'triggers',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersElementMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'triggers',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
-      triggersElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'triggers',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
-      triggersElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'triggers',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition>
-      triggersLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> triggersLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'triggers',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
 }
 
 extension TriggerQueryObject
-    on QueryBuilder<Trigger, Trigger, QFilterCondition> {}
+    on QueryBuilder<Trigger, Trigger, QFilterCondition> {
+  QueryBuilder<Trigger, Trigger, QAfterFilterCondition> emotionsElement(
+      FilterQuery<Emotion> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'emotions');
+    });
+  }
+}
 
 extension TriggerQueryLinks
     on QueryBuilder<Trigger, Trigger, QFilterCondition> {}
 
 extension TriggerQuerySortBy on QueryBuilder<Trigger, Trigger, QSortBy> {
-  QueryBuilder<Trigger, Trigger, QAfterSortBy> sortByComment() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'comment', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterSortBy> sortByCommentDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'comment', Sort.desc);
-    });
-  }
-
   QueryBuilder<Trigger, Trigger, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -764,18 +504,6 @@ extension TriggerQuerySortBy on QueryBuilder<Trigger, Trigger, QSortBy> {
 
 extension TriggerQuerySortThenBy
     on QueryBuilder<Trigger, Trigger, QSortThenBy> {
-  QueryBuilder<Trigger, Trigger, QAfterSortBy> thenByComment() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'comment', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QAfterSortBy> thenByCommentDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'comment', Sort.desc);
-    });
-  }
-
   QueryBuilder<Trigger, Trigger, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -803,23 +531,10 @@ extension TriggerQuerySortThenBy
 
 extension TriggerQueryWhereDistinct
     on QueryBuilder<Trigger, Trigger, QDistinct> {
-  QueryBuilder<Trigger, Trigger, QDistinct> distinctByComment(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'comment', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<Trigger, Trigger, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Trigger, Trigger, QDistinct> distinctByTriggers() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'triggers');
     });
   }
 }
@@ -832,9 +547,9 @@ extension TriggerQueryProperty
     });
   }
 
-  QueryBuilder<Trigger, String, QQueryOperations> commentProperty() {
+  QueryBuilder<Trigger, List<Emotion>, QQueryOperations> emotionsProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'comment');
+      return query.addPropertyName(r'emotions');
     });
   }
 
@@ -843,10 +558,226 @@ extension TriggerQueryProperty
       return query.addPropertyName(r'name');
     });
   }
+}
 
-  QueryBuilder<Trigger, List<String>, QQueryOperations> triggersProperty() {
+// **************************************************************************
+// IsarEmbeddedGenerator
+// **************************************************************************
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const EmotionSchema = Schema(
+  name: r'Emotion',
+  id: -212463614509010908,
+  properties: {
+    r'count': PropertySchema(
+      id: 0,
+      name: r'count',
+      type: IsarType.long,
+    ),
+    r'type': PropertySchema(
+      id: 1,
+      name: r'type',
+      type: IsarType.byte,
+      enumMap: _EmotiontypeEnumValueMap,
+    )
+  },
+  estimateSize: _emotionEstimateSize,
+  serialize: _emotionSerialize,
+  deserialize: _emotionDeserialize,
+  deserializeProp: _emotionDeserializeProp,
+);
+
+int _emotionEstimateSize(
+  Emotion object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
+}
+
+void _emotionSerialize(
+  Emotion object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.count);
+  writer.writeByte(offsets[1], object.type.index);
+}
+
+Emotion _emotionDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = Emotion(
+    count: reader.readLongOrNull(offsets[0]) ?? 0,
+    type: _EmotiontypeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
+        TriggerEmotions.none,
+  );
+  return object;
+}
+
+P _emotionDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLongOrNull(offset) ?? 0) as P;
+    case 1:
+      return (_EmotiontypeValueEnumMap[reader.readByteOrNull(offset)] ??
+          TriggerEmotions.none) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+const _EmotiontypeEnumValueMap = {
+  'Affection': 0,
+  'Hope': 1,
+  'Joy': 2,
+  'Boredom': 3,
+  'Balance': 4,
+  'Sadness': 5,
+  'Confusion': 6,
+  'Anxiety': 7,
+  'Meloncholia': 8,
+  'Irritation': 9,
+  'Anger': 10,
+  'Tension': 11,
+  'none': 12,
+};
+const _EmotiontypeValueEnumMap = {
+  0: TriggerEmotions.Affection,
+  1: TriggerEmotions.Hope,
+  2: TriggerEmotions.Joy,
+  3: TriggerEmotions.Boredom,
+  4: TriggerEmotions.Balance,
+  5: TriggerEmotions.Sadness,
+  6: TriggerEmotions.Confusion,
+  7: TriggerEmotions.Anxiety,
+  8: TriggerEmotions.Meloncholia,
+  9: TriggerEmotions.Irritation,
+  10: TriggerEmotions.Anger,
+  11: TriggerEmotions.Tension,
+  12: TriggerEmotions.none,
+};
+
+extension EmotionQueryFilter
+    on QueryBuilder<Emotion, Emotion, QFilterCondition> {
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> countEqualTo(
+      int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'triggers');
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> countGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> countLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'count',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> countBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'count',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeEqualTo(
+      TriggerEmotions value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeGreaterThan(
+    TriggerEmotions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeLessThan(
+    TriggerEmotions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeBetween(
+    TriggerEmotions lower,
+    TriggerEmotions upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'type',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
     });
   }
 }
+
+extension EmotionQueryObject
+    on QueryBuilder<Emotion, Emotion, QFilterCondition> {}

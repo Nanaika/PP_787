@@ -1,8 +1,7 @@
-import 'package:PP_787/storages/models/mood.dart';
+import 'package:PP_787/storages/models/anchor.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'models/trigger.dart';
 
 abstract class AppIsarDatabase {
   static late final Isar _instance;
@@ -10,18 +9,18 @@ abstract class AppIsarDatabase {
   static Future<Isar> init() async {
     final dir = await getApplicationDocumentsDirectory();
     return _instance = await Isar.open(
-      [MoodSchema],
+      [AnchorSchema],
       directory: dir.path,
     );
   }
 
-  static Future<void> addTrigger(Trigger trigger) async {
-    await _instance.writeTxn(() async => await _instance.triggers.put(trigger));
+  static Future<void> addAnchor(Anchor anchor) async {
+    await _instance.writeTxn(() async => await _instance.anchors.put(anchor));
   }
 
-  static Future<List<Trigger>> getTriggers() async {
+  static Future<List<Anchor>> getAnchors() async {
     return await _instance.writeTxn(
-      () async => await _instance.triggers.where().findAll(),
+      () async => await _instance.anchors.where().findAll(),
     );
   }
 

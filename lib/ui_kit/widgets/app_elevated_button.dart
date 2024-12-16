@@ -29,6 +29,13 @@ class AppElevatedButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppConstants.duration200,
         decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, 4),
+              blurRadius: 16,
+              color: AppColors.black.withOpacity(0.1),
+            ),
+          ],
           borderRadius: BorderRadius.circular(64),
           color: isActive ? backgroundColor : backgroundColor.withOpacity(0.5),
         ),
