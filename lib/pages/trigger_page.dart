@@ -124,14 +124,11 @@ class TriggerTile extends StatelessWidget {
             SizedBox(
               width: 32,
             ),
-            ConstrainedBox(
-              constraints: BoxConstraints(minWidth: 0, maxWidth: (MediaQuery.of(context).size.width - 32) / 2),
-              child: Text(
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                state[index].name,
-                style: AppStyles.bodyMedium,
-              ),
+            Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              state[index].name,
+              style: AppStyles.bodyMedium,
             ),
             SizedBox(
               width: 8,
