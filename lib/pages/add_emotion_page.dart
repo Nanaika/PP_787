@@ -24,7 +24,6 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
   @override
   Widget build(BuildContext context) {
     final trigger = ModalRoute.of(context)?.settings.arguments as Trigger;
-    print('TEEEEEEE---------------------- ${trigger.emotions.length}');
     return BlocProvider(
       create: (_) => TriggerBloc(trigger: trigger),
       child: Builder(

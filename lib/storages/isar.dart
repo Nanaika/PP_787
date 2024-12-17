@@ -38,13 +38,14 @@ abstract class AppIsarDatabase {
 
   static Future<void> updateEmotions(List<Emotion> emotions, int id) async {
     final old = await _instance.triggers.get(id);
-    print('OLD ------id---${old?.id}--------${old?.emotions.length}');
     if (old != null) {
-      print('lllll-----------------  ${emotions.length}');
       old.emotions = emotions;
-      print('lllll-----------------  ${old.emotions.length}');
       await _instance.writeTxn(() async => await _instance.triggers.put(old));
     }
+  }
+
+  static Future<void> deleteTrigger(int id) async {
+    await _instance.writeTxn(() async => await _instance.triggers.delete(id));
   }
 
   //
@@ -59,9 +60,7 @@ abstract class AppIsarDatabase {
 //     await _instance.writeTxn(() async => await _instance.tasks.put(task));
 //   }
 //
-//   static Future<void> deleteTask(int id) async {
-//     await _instance.writeTxn(() async => await _instance.tasks.delete(id));
-//   }
+
 //
 //   static Future<void> updateTask(int id, Task newTask) async {
 //     await _instance.writeTxn(() async {

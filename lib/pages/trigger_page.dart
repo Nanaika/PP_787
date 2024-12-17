@@ -52,9 +52,13 @@ class TriggerPage extends StatelessWidget {
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             itemBuilder: (ctx, index) {
-                              return TriggerTile(index: index, state: state, onTap: () {
-                                      Navigator.of(context).pushNamed(AppRoutes.editTrigger, arguments: state[index]);
-                              },);
+                              return TriggerTile(
+                                index: index,
+                                state: state,
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(AppRoutes.editTrigger, arguments: index);
+                                },
+                              );
                             },
                             separatorBuilder: (ctx, index) {
                               return Container(
@@ -92,22 +96,27 @@ class TriggerPage extends StatelessWidget {
 
 class TriggerTile extends StatelessWidget {
   const TriggerTile({
-    super.key, required this.index, required this.state, this.onTap,
+    super.key,
+    required this.index,
+    required this.state,
+    this.onTap,
   });
+
   final List<Trigger> state;
   final int index;
   final void Function()? onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 60,
+        height: 72,
+        padding: EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(color: index == 0 ? AppColors.secondary : Colors.transparent),
-            bottom: BorderSide(
-                color: index == state.length - 1 ? AppColors.secondary : Colors.transparent),
+            bottom: BorderSide(color: index == state.length - 1 ? AppColors.secondary : Colors.transparent),
           ),
         ),
         child: Row(
@@ -115,7 +124,8 @@ class TriggerTile extends StatelessWidget {
             SizedBox(
               width: 32,
             ),
-            Expanded(
+            ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 0, maxWidth: (MediaQuery.of(context).size.width - 32) / 2),
               child: Text(
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -123,14 +133,24 @@ class TriggerTile extends StatelessWidget {
                 style: AppStyles.bodyMedium,
               ),
             ),
-            SizedBox(width: 8,),
+            SizedBox(
+              width: 8,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-
-                  ],
+                  mainAxisSize: MainAxisSize.max,
+                  children: List.generate(state[index].emotions.length, (innerIndex) {
+                    return Container(
+                      width: 60,
+                      height: 60,
+                      padding: EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        AppIcons.triggerEmotionsIcons[state[index].emotions[innerIndex].type.index],
+                      ),
+                    );
+                  }),
                 ),
               ),
             )

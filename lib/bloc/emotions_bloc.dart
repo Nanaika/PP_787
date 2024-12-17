@@ -47,6 +47,11 @@ class EmotionsBloc extends Cubit<EmotionsState> {
     await getTriggers();
   }
 
+  Future<void> deleteTrigger(int id) async {
+    await AppIsarDatabase.deleteTrigger(id);
+    await getTriggers();
+  }
+
   // Future<void> addMood(Mood mood) async {
   //   print('ADD MOOD from BLOC ----------------  ${mood.id}');
   //   await AppIsarDatabase.addMood(mood);
