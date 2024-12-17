@@ -8,6 +8,14 @@ abstract class AppImages {
   static const trigger2 = "assets/images/trigger2.png";
   static const trigger3 = "assets/images/trigger3.png";
 
+  static const exec1 = "assets/images/exec1.png";
+  static const exec2 = "assets/images/exec2.png";
+  static const exec3 = "assets/images/exec3.png";
+  static const exec4 = "assets/images/exec4.png";
+  static const exec5 = "assets/images/exec5.png";
+
+
+
   static const onBoardingAssets = [onBoarding1, onBoarding2, onBoarding3];
 }
 
@@ -38,6 +46,8 @@ abstract class AppIcons {
   static const irritation = 'assets/icons/irritation.svg';
   static const anger = 'assets/icons/anger.svg';
   static const tension = 'assets/icons/tension.svg';
+
+
 
   static const star = 'assets/icons/star.svg';
 

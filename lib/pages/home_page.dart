@@ -68,6 +68,11 @@ class HomePage extends StatelessWidget {
                                     Navigator.of(context).pushNamed(AppRoutes.trigger);
                                     break;
                                   }
+                                case 3:
+                                  {
+                                    Navigator.of(context).pushNamed(AppRoutes.exercise);
+                                    break;
+                                  }
                                 case 4:
                                   {
                                     Navigator.of(context).pushNamed(AppRoutes.anchor);

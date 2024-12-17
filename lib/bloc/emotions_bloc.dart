@@ -1,15 +1,16 @@
 import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../storages/isar.dart';
 
 class EmotionsBloc extends Cubit<EmotionsState> {
-  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [])) {
+  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [], exercises: [])) {
     getAnchors();
     getTriggers();
+    getExercises();
   }
 
   Future<void> getAnchors() async {
@@ -50,6 +51,27 @@ class EmotionsBloc extends Cubit<EmotionsState> {
   Future<void> deleteTrigger(int id) async {
     await AppIsarDatabase.deleteTrigger(id);
     await getTriggers();
+  }
+
+  Future<void> getExercises() async {
+    final exercises = await AppIsarDatabase.getExercises(
+    );
+    emit(
+      state.copyWith(
+        exercises: exercises,
+      ),
+    );
+
+    for(int i = 0; i < exercises.length; i++) {
+    print('ESEC --- ${exercises[i].date}');
+    print('ESEC --- ${exercises[i].words}');
+    print('ESEC --- ${exercises[i].answers}');
+    }
+  }
+
+  Future<void> addExercise(Exercise exercise) async {
+    await AppIsarDatabase.addExercise(exercise);
+    await getExercises();
   }
 
   // Future<void> addMood(Mood mood) async {

@@ -4,6 +4,7 @@ import 'package:PP_787/pages/add_emotion_page.dart';
 import 'package:PP_787/pages/add_trigger_page.dart';
 import 'package:PP_787/pages/anchor_page.dart';
 import 'package:PP_787/pages/edit_trigger_page.dart';
+import 'package:PP_787/pages/exercise_page.dart';
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/pages/onboarding_page.dart';
 import 'package:PP_787/pages/settings_page.dart';
@@ -109,6 +110,10 @@ class MyApp extends StatelessWidget {
           AppRoutes.addEmotion => CupertinoPageRoute(
             settings: settings,
             builder: (context) => const AddEmotionPage(),
+          ),
+          AppRoutes.exercise => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const ExercisePage(),
           ),
 
           _ => null,

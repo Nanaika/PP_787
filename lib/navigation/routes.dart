@@ -9,4 +9,5 @@ abstract class AppRoutes {
   static const addTrigger = '/addTrigger';
   static const editTrigger = '/editTrigger';
   static const addEmotion = '/addEmotion';
+  static const exercise = '/exercise';
 }

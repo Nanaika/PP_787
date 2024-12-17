@@ -1,4 +1,5 @@
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,7 +11,7 @@ abstract class AppIsarDatabase {
   static Future<Isar> init() async {
     final dir = await getApplicationDocumentsDirectory();
     return _instance = await Isar.open(
-      [AnchorSchema, TriggerSchema],
+      [AnchorSchema, TriggerSchema, ExerciseSchema],
       directory: dir.path,
     );
   }
@@ -46,6 +47,16 @@ abstract class AppIsarDatabase {
 
   static Future<void> deleteTrigger(int id) async {
     await _instance.writeTxn(() async => await _instance.triggers.delete(id));
+  }
+
+  static Future<void> addExercise(Exercise exercise) async {
+    await _instance.writeTxn(() async => await _instance.exercises.put(exercise));
+  }
+
+  static Future<List<Exercise>> getExercises() async {
+    return await _instance.writeTxn(
+          () async => await _instance.exercises.where().findAll(),
+    );
   }
 
   //

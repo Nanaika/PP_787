@@ -1,4 +1,3 @@
-import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/utils/assets_paths.dart';
