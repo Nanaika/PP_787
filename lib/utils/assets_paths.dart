@@ -14,9 +14,14 @@ abstract class AppImages {
   static const exec4 = "assets/images/exec4.png";
   static const exec5 = "assets/images/exec5.png";
 
+  static const positive = "assets/images/positive.png";
+  static const neutral = "assets/images/neutral.png";
+  static const negative = "assets/images/negative.png";
+
 
 
   static const onBoardingAssets = [onBoarding1, onBoarding2, onBoarding3];
+  static const feelings = [positive, neutral, negative];
 }
 
 abstract class AppIcons {
@@ -47,9 +52,35 @@ abstract class AppIcons {
   static const anger = 'assets/icons/anger.svg';
   static const tension = 'assets/icons/tension.svg';
 
-
+  static const custom_emotion1 = 'assets/icons/custom_emotion1.svg';
+  static const custom_emotion2 = 'assets/icons/custom_emotion2.svg';
+  static const custom_emotion3 = 'assets/icons/custom_emotion3.svg';
+  static const custom_emotion4 = 'assets/icons/custom_emotion4.svg';
+  static const custom_emotion5 = 'assets/icons/custom_emotion5.svg';
+  static const custom_emotion6 = 'assets/icons/custom_emotion6.svg';
+  static const custom_emotion7 = 'assets/icons/custom_emotion7.svg';
+  static const custom_emotion8 = 'assets/icons/custom_emotion8.svg';
+  static const custom_emotion9 = 'assets/icons/custom_emotion9.svg';
+  static const custom_emotion10 = 'assets/icons/custom_emotion10.svg';
+  static const custom_emotion11 = 'assets/icons/custom_emotion11.svg';
+  static const custom_emotion12 = 'assets/icons/custom_emotion12.svg';
 
   static const star = 'assets/icons/star.svg';
+
+  static const customEmotions = [
+    custom_emotion1,
+    custom_emotion2,
+    custom_emotion3,
+    custom_emotion4,
+    custom_emotion5,
+    custom_emotion6,
+    custom_emotion7,
+    custom_emotion8,
+    custom_emotion9,
+    custom_emotion10,
+    custom_emotion11,
+    custom_emotion12,
+  ];
 
   static const triggerEmotionsIcons = [
     affection,

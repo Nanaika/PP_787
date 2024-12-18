@@ -3,12 +3,14 @@ import 'package:PP_787/pages/add_anchor_page.dart';
 import 'package:PP_787/pages/add_emotion_page.dart';
 import 'package:PP_787/pages/add_trigger_page.dart';
 import 'package:PP_787/pages/anchor_page.dart';
+import 'package:PP_787/pages/check_in_page.dart';
 import 'package:PP_787/pages/edit_trigger_page.dart';
 import 'package:PP_787/pages/exercise_page.dart';
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/pages/onboarding_page.dart';
 import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/pages/splash_page.dart';
+import 'package:PP_787/pages/time_line_page.dart';
 import 'package:PP_787/pages/trigger_page.dart';
 import 'package:PP_787/remote_config.dart';
 import 'package:PP_787/storages/isar.dart';
@@ -114,6 +116,14 @@ class MyApp extends StatelessWidget {
           AppRoutes.exercise => CupertinoPageRoute(
             settings: settings,
             builder: (context) => const ExercisePage(),
+          ),
+          AppRoutes.checkIn => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const CheckInPage(),
+          ),
+          AppRoutes.timeLine => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const TimeLinePage(),
           ),
 
           _ => null,

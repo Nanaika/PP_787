@@ -1,5 +1,6 @@
 import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +8,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../storages/isar.dart';
 
 class EmotionsBloc extends Cubit<EmotionsState> {
-  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [], exercises: [])) {
+  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [], exercises: [], checkIns: [])) {
     getAnchors();
     getTriggers();
     getExercises();
+    getCheckIns();
   }
+
+  Future<void> getCheckIns() async {
+    final checkIns = await AppIsarDatabase.getCheckIns(
+    );
+    emit(
+      state.copyWith(
+        checkIns: checkIns,
+      ),
+    );
+  }
+
+  Future<void> addCheckIn(CheckIn checkIn) async {
+    await AppIsarDatabase.addCheckIn(checkIn);
+    await getCheckIns();
+  }
+
 
   Future<void> getAnchors() async {
     final anchors = await AppIsarDatabase.getAnchors(

@@ -1,4 +1,5 @@
 import 'package:PP_787/storages/models/anchor.dart';
+import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:isar/isar.dart';
@@ -11,8 +12,18 @@ abstract class AppIsarDatabase {
   static Future<Isar> init() async {
     final dir = await getApplicationDocumentsDirectory();
     return _instance = await Isar.open(
-      [AnchorSchema, TriggerSchema, ExerciseSchema],
+      [AnchorSchema, TriggerSchema, ExerciseSchema, CheckInSchema],
       directory: dir.path,
+    );
+  }
+
+  static Future<void> addCheckIn(CheckIn checkIn) async {
+    await _instance.writeTxn(() async => await _instance.checkIns.put(checkIn));
+  }
+
+  static Future<List<CheckIn>> getCheckIns() async {
+    return await _instance.writeTxn(
+          () async => await _instance.checkIns.where().findAll(),
     );
   }
 

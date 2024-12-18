@@ -77,7 +77,7 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
                                     selected = totalIndex;
                                   });
                                 },
-                                child: EmotionTile(selected: selected, totalIndex: totalIndex),
+                                child: EmotionTile(selected: selected, totalIndex: totalIndex, isSelected: totalIndex == selected,),
                               );
                             }),
                           ),
@@ -120,11 +120,12 @@ class EmotionTile extends StatelessWidget {
   const EmotionTile({
     super.key,
     required this.selected,
-    required this.totalIndex,
+    required this.totalIndex, required this.isSelected,
   });
 
   final int selected;
   final int totalIndex;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +133,13 @@ class EmotionTile extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Container(
+            AnimatedContainer(
+
               width: 65,
               height: 65,
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
+                border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent, width: 4),
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.surface,
                 boxShadow: [
@@ -147,31 +150,9 @@ class EmotionTile extends StatelessWidget {
                   ),
                 ],
               ),
+              duration: AppConstants.duration200,
               child: SvgPicture.asset(
                 AppIcons.triggerEmotionsIcons[totalIndex],
-              ),
-            ),
-            AnimatedOpacity(
-              opacity: selected == totalIndex ? 1 : 0,
-              duration: AppConstants.duration200,
-              child: Container(
-                width: 65,
-                height: 65,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppColors.secondary,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      blurRadius: 16,
-                      color: AppColors.black.withOpacity(0.1),
-                    ),
-                  ],
-                ),
-                child: SvgPicture.asset(
-                  AppIcons.triggerEmotionsIcons[totalIndex],
-                ),
               ),
             ),
           ],
