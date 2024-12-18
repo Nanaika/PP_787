@@ -20,12 +20,12 @@ class Trigger {
 @embedded
 class Emotion {
   @enumerated
-  TriggerEmotions type;
+  Emotions type;
   int count;
 
-  Emotion({this.type = TriggerEmotions.none, this.count = 0});
+  Emotion({this.type = Emotions.none, this.count = 0});
 }
-enum TriggerEmotions {
+enum Emotions {
   Affection,
   Hope,
   Joy,

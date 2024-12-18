@@ -617,7 +617,7 @@ Emotion _emotionDeserialize(
   final object = Emotion(
     count: reader.readLongOrNull(offsets[0]) ?? 0,
     type: _EmotiontypeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-        TriggerEmotions.none,
+        Emotions.none,
   );
   return object;
 }
@@ -633,7 +633,7 @@ P _emotionDeserializeProp<P>(
       return (reader.readLongOrNull(offset) ?? 0) as P;
     case 1:
       return (_EmotiontypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          TriggerEmotions.none) as P;
+          Emotions.none) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -655,19 +655,19 @@ const _EmotiontypeEnumValueMap = {
   'none': 12,
 };
 const _EmotiontypeValueEnumMap = {
-  0: TriggerEmotions.Affection,
-  1: TriggerEmotions.Hope,
-  2: TriggerEmotions.Joy,
-  3: TriggerEmotions.Boredom,
-  4: TriggerEmotions.Balance,
-  5: TriggerEmotions.Sadness,
-  6: TriggerEmotions.Confusion,
-  7: TriggerEmotions.Anxiety,
-  8: TriggerEmotions.Meloncholia,
-  9: TriggerEmotions.Irritation,
-  10: TriggerEmotions.Anger,
-  11: TriggerEmotions.Tension,
-  12: TriggerEmotions.none,
+  0: Emotions.Affection,
+  1: Emotions.Hope,
+  2: Emotions.Joy,
+  3: Emotions.Boredom,
+  4: Emotions.Balance,
+  5: Emotions.Sadness,
+  6: Emotions.Confusion,
+  7: Emotions.Anxiety,
+  8: Emotions.Meloncholia,
+  9: Emotions.Irritation,
+  10: Emotions.Anger,
+  11: Emotions.Tension,
+  12: Emotions.none,
 };
 
 extension EmotionQueryFilter
@@ -726,7 +726,7 @@ extension EmotionQueryFilter
   }
 
   QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeEqualTo(
-      TriggerEmotions value) {
+      Emotions value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'type',
@@ -736,7 +736,7 @@ extension EmotionQueryFilter
   }
 
   QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeGreaterThan(
-    TriggerEmotions value, {
+    Emotions value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -749,7 +749,7 @@ extension EmotionQueryFilter
   }
 
   QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeLessThan(
-    TriggerEmotions value, {
+    Emotions value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -762,8 +762,8 @@ extension EmotionQueryFilter
   }
 
   QueryBuilder<Emotion, Emotion, QAfterFilterCondition> typeBetween(
-    TriggerEmotions lower,
-    TriggerEmotions upper, {
+    Emotions lower,
+    Emotions upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {

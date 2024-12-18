@@ -21,9 +21,15 @@ abstract class AppIsarDatabase {
     await _instance.writeTxn(() async => await _instance.checkIns.put(checkIn));
   }
 
-  static Future<List<CheckIn>> getCheckIns() async {
+  static Future<List<CheckIn>> getCheckIns(DateTime date) async {
     return await _instance.writeTxn(
-          () async => await _instance.checkIns.where().findAll(),
+          () async => await _instance.checkIns.filter().dateEqualTo(date).sortByDateDesc().findAll(),
+    );
+  }
+
+  static Future<List<CheckIn>> getAllCheckIns() async {
+    return await _instance.writeTxn(
+          () async => await _instance.checkIns.where().sortByDateDesc().findAll(),
     );
   }
 
@@ -64,9 +70,9 @@ abstract class AppIsarDatabase {
     await _instance.writeTxn(() async => await _instance.exercises.put(exercise));
   }
 
-  static Future<List<Exercise>> getExercises() async {
+  static Future<List<Exercise>> getExercises(DateTime date) async {
     return await _instance.writeTxn(
-          () async => await _instance.exercises.where().findAll(),
+          () async => await _instance.exercises.filter().dateEqualTo(date).findAll(),
     );
   }
 

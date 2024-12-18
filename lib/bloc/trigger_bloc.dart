@@ -19,7 +19,7 @@ class TriggerBloc extends Cubit<Trigger> {
       final elem = copy.firstWhere((elem) => elem.type.index == index);
       elem.count++;
     } else {
-      final elem = Emotion(type: TriggerEmotions.values[index], count: 1);
+      final elem = Emotion(type: Emotions.values[index], count: 1);
       copy.add(elem);
     }
     emit(state.copyWith(emotions: copy));

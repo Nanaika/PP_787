@@ -18,6 +18,8 @@ abstract class AppImages {
   static const neutral = "assets/images/neutral.png";
   static const negative = "assets/images/negative.png";
 
+  static const tl_empty = "assets/images/tl_empty.png";
+
 
 
   static const onBoardingAssets = [onBoarding1, onBoarding2, onBoarding3];

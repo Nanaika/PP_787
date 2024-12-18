@@ -434,7 +434,7 @@ class EmotionTile extends StatelessWidget {
           ),
         if (!isCustom)
           Text(
-            TriggerEmotions.values[totalIndex].name,
+            Emotions.values[totalIndex].name,
             style: AppStyles.bodyMedium,
           ),
       ],

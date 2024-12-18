@@ -11,22 +11,36 @@ class EmotionsState extends Equatable {
     required this.triggers,
     required this.exercises,
     required this.checkIns,
+    required this.date,
+    required this.allCheckIns
   });
 
   final List<Anchor> anchors;
   final List<Trigger> triggers;
   final List<Exercise> exercises;
   final List<CheckIn> checkIns;
+  final List<CheckIn> allCheckIns;
+  final DateTime date;
 
   @override
-  List<Object?> get props => [anchors, triggers, exercises, checkIns];
+  List<Object?> get props =>
+      [anchors, triggers, exercises, checkIns, date, allCheckIns];
 
-  EmotionsState copyWith({List<Anchor>? anchors, List<Trigger>? triggers, List<Exercise>? exercises, List<CheckIn>? checkIns}) {
+  EmotionsState copyWith({
+    List<Anchor>? anchors,
+    List<Trigger>? triggers,
+    List<Exercise>? exercises,
+    List<CheckIn>? checkIns,
+    DateTime? date,
+    List<CheckIn>? allCheckIns,
+  }) {
     return EmotionsState(
       anchors: anchors ?? this.anchors,
       triggers: triggers ?? this.triggers,
       exercises: exercises ?? this.exercises,
       checkIns: checkIns ?? this.checkIns,
+      allCheckIns: allCheckIns ?? this.allCheckIns,
+      date: date ?? this.date,
     );
   }
 }

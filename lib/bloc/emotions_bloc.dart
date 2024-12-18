@@ -3,21 +3,41 @@ import 'package:PP_787/storages/models/anchor.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../storages/isar.dart';
 
 class EmotionsBloc extends Cubit<EmotionsState> {
-  EmotionsBloc() : super(EmotionsState(anchors: [], triggers: [], exercises: [], checkIns: [])) {
+  EmotionsBloc()
+      : super(
+          EmotionsState(
+            anchors: [],
+            triggers: [],
+            exercises: [],
+            checkIns: [],
+            allCheckIns: [],
+            date: DateUtils.dateOnly(
+              DateTime.now(),
+            ),
+          ),
+        ) {
     getAnchors();
     getTriggers();
-    getExercises();
-    getCheckIns();
+    getExercises(state.date);
+    getCheckIns(state.date);
+    getAllCheckIns();
   }
 
-  Future<void> getCheckIns() async {
-    final checkIns = await AppIsarDatabase.getCheckIns(
-    );
+  Future<void> updateDate(DateTime newDate) async {
+    emit(state.copyWith(date: newDate));
+    getCheckIns(newDate);
+    getExercises(newDate);
+    getAllCheckIns();
+  }
+
+  Future<void> getCheckIns(DateTime date) async {
+    final checkIns = await AppIsarDatabase.getCheckIns(date);
     emit(
       state.copyWith(
         checkIns: checkIns,
@@ -25,15 +45,23 @@ class EmotionsBloc extends Cubit<EmotionsState> {
     );
   }
 
-  Future<void> addCheckIn(CheckIn checkIn) async {
-    await AppIsarDatabase.addCheckIn(checkIn);
-    await getCheckIns();
+  Future<void> getAllCheckIns() async {
+    final checkIns = await AppIsarDatabase.getAllCheckIns();
+    emit(
+      state.copyWith(
+        allCheckIns: checkIns,
+      ),
+    );
   }
 
+  Future<void> addCheckIn(CheckIn checkIn) async {
+    await AppIsarDatabase.addCheckIn(checkIn);
+    await getCheckIns(state.date);
+    getAllCheckIns();
+  }
 
   Future<void> getAnchors() async {
-    final anchors = await AppIsarDatabase.getAnchors(
-    );
+    final anchors = await AppIsarDatabase.getAnchors();
     emit(
       state.copyWith(
         anchors: anchors,
@@ -52,8 +80,7 @@ class EmotionsBloc extends Cubit<EmotionsState> {
   }
 
   Future<void> getTriggers() async {
-    final triggers = await AppIsarDatabase.getTriggers(
-    );
+    final triggers = await AppIsarDatabase.getTriggers();
     emit(
       state.copyWith(
         triggers: triggers,
@@ -71,121 +98,17 @@ class EmotionsBloc extends Cubit<EmotionsState> {
     await getTriggers();
   }
 
-  Future<void> getExercises() async {
-    final exercises = await AppIsarDatabase.getExercises(
-    );
+  Future<void> getExercises(DateTime date) async {
+    final exercises = await AppIsarDatabase.getExercises(date);
     emit(
       state.copyWith(
         exercises: exercises,
       ),
     );
-
-    for(int i = 0; i < exercises.length; i++) {
-    print('ESEC --- ${exercises[i].date}');
-    print('ESEC --- ${exercises[i].words}');
-    print('ESEC --- ${exercises[i].answers}');
-    }
   }
 
   Future<void> addExercise(Exercise exercise) async {
     await AppIsarDatabase.addExercise(exercise);
-    await getExercises();
+    await getExercises(state.date);
   }
-
-  // Future<void> addMood(Mood mood) async {
-  //   print('ADD MOOD from BLOC ----------------  ${mood.id}');
-  //   await AppIsarDatabase.addMood(mood);
-  //   await getMoods();
-  //
-  // }
-  //
-  // Future<void> updateMood(Mood mood, int id) async {
-  //   await AppIsarDatabase.updateMood(mood, id);
-  //   await getMoods();
-  //
-  // }
-  //
-  // Future<void> getMoods() async {
-  //   final moods = await AppIsarDatabase.getMoods(
-  //   );
-  //   emit(
-  //     state.copyWith(
-  //       moods: moods,
-  //     ),
-  //   );
-  // }
-
-
-  //
-  // Future<void> deleteTask(int id) async {
-  //   await AppIsarDatabase.deleteTask(id);
-  //   await getTasks();
-  // }
-  //
-  // Future<void> updateTask(int id, TaskState task) async {
-  //   await AppIsarDatabase.updateTask(id, task.toIsarModel());
-  //   await getTasks();
-  // }
-  //
-
-
-  //
-  // Future<void> updateTaskType(int index) async {
-  //   emit(state.copyWith(taskType: index));
-  //   await getTasks();
-  // }
-  //
-  // Future<void> updateTaskDaily(bool value) async {
-  //   emit(state.copyWith(taskDaily: value));
-  //   await getTasks();
-  // }
-  //
-  // Future<void> getGoals() async {
-  //   final goals = await AppIsarDatabase.getGoals();
-  //   emit(
-  //     state.copyWith(
-  //       goals: goals.reversed.map((e) => GoalState.fromIsarModel(e)).toList(),
-  //     ),
-  //   );
-  // }
-  //
-  // Future<void> addGoal(GoalState goal) async {
-  //   await AppIsarDatabase.addGoal(goal.toIsarModel());
-  //   await getGoals();
-  // }
-  //
-  // Future<void> deleteGoal(int id) async {
-  //   await AppIsarDatabase.deleteGoal(id);
-  //   await getGoals();
-  // }
-  //
-  // Future<void> updateGoal(int id, GoalState goal) async {
-  //   await AppIsarDatabase.updateGoal(id, goal.toIsarModel());
-  //   await getGoals();
-  // }
-  //
-  // Future<void> getHabits() async {
-  //   final habits = await AppIsarDatabase.getHabits();
-  //   emit(
-  //     state.copyWith(
-  //       habits:
-  //           habits.reversed.map((e) => HabitState.fromIsarModel(e)).toList(),
-  //     ),
-  //   );
-  // }
-  //
-  // Future<void> addHabit(HabitState habit) async {
-  //   await AppIsarDatabase.addHabit(habit.toIsarModel());
-  //   await getHabits();
-  // }
-  //
-  // Future<void> deleteHabit(int id) async {
-  //   await AppIsarDatabase.deleteHabit(id);
-  //   await getHabits();
-  // }
-  //
-  // Future<void> updateHabit(int id, HabitState habit) async {
-  //   await AppIsarDatabase.updateHabit(id, habit.toIsarModel());
-  //   await getHabits();
-  // }
 }

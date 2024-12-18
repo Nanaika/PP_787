@@ -99,7 +99,7 @@ class EditTriggerPage extends StatelessWidget {
                                           height: 65,
                                         ),
                                         Text(
-                                          TriggerEmotions.values[state[index].emotions[rowIndex ~/ 2].type.index].name,
+                                          Emotions.values[state[index].emotions[rowIndex ~/ 2].type.index].name,
                                           style: AppStyles.bodyMedium,
                                         )
                                       ],

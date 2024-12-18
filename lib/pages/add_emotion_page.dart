@@ -161,7 +161,7 @@ class EmotionTile extends StatelessWidget {
           height: 8,
         ),
         Text(
-          TriggerEmotions.values[totalIndex].name,
+          Emotions.values[totalIndex].name,
           style: AppStyles.bodyMedium,
         )
       ],

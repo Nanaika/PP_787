@@ -1,4 +1,5 @@
 import 'package:PP_787/navigation/routes.dart';
+import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/utils/constants.dart';
@@ -30,7 +31,9 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 16,
                 ),
-                Bar(),
+                // Bar(
+                //   items: [],
+                // ),
               ],
             ),
           ),
@@ -93,7 +96,6 @@ class HomePage extends StatelessWidget {
                                     Navigator.of(context).pushNamed(AppRoutes.settings);
                                     break;
                                   }
-
                               }
                             },
                           );
@@ -169,59 +171,90 @@ class CategoryTile extends StatelessWidget {
 class Bar extends StatefulWidget {
   const Bar({
     super.key,
+    required this.items,
   });
+
+  final List<CheckIn> items;
 
   @override
   State<Bar> createState() => _BarState();
 }
 
 class _BarState extends State<Bar> {
-  double orangeWidthFactor = 0.1;
-  double grayWidthFactor = 0.2;
-  double blueWidthFactor = 0.7;
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          orangeWidthFactor = orangeWidthFactor == 0.1 ? 0.7 : 0.1;
-          grayWidthFactor = grayWidthFactor == 0.2 ? 0.2 : 0.2;
-          blueWidthFactor = blueWidthFactor == 0.7 ? 0.1 : 0.7;
-        });
-      },
-      child: Container(
-        width: double.infinity,
-        clipBehavior: Clip.hardEdge,
-        height: 36,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32.0),
-        ),
-        child: Row(
-          children: [
-            AnimatedContainer(
-              width: orangeWidthFactor * (MediaQuery.of(context).size.width - 32),
-              duration: AppConstants.duration200,
-              child: Container(
-                color: AppColors.orange,
-              ),
+    final sumPositivePower = widget.items.fold(0, (prev, item) {
+      if (item.feeling == FeelingType.Positive) {
+        return prev + item.feelingPower;
+      } else {
+        return prev;
+      }
+    });
+    final sumNeutralPower = widget.items.fold(0, (prev, item) {
+      if (item.feeling == FeelingType.Neutral) {
+        return prev + item.feelingPower;
+      } else {
+        return prev;
+      }
+    });
+    final sumNegativePower = widget.items.fold(0, (prev, item) {
+      if (item.feeling == FeelingType.Negative) {
+        return prev + item.feelingPower;
+      } else {
+        return prev;
+      }
+    });
+    final totalPower = widget.items.fold(0, (prev, item) => prev + item.feelingPower);
+    double positiveWidthFactor = 0;
+    double neutralWidthFactor = 0;
+    double negativeWidthFactor = 0;
+    if (totalPower > 0) {
+      positiveWidthFactor = sumPositivePower / totalPower.toDouble();
+    }
+    if(totalPower > 0) {
+      neutralWidthFactor = sumNeutralPower / totalPower.toDouble();
+    }
+    if(totalPower > 0) {
+      negativeWidthFactor = sumNegativePower / totalPower.toDouble();
+    }
+    print('TEST pos -------------------${positiveWidthFactor}');
+    print('TEST nut -------------------${neutralWidthFactor}');
+    print('TEST nega -------------------${negativeWidthFactor}');
+
+    print('TEst ----- ${sumPositivePower}');
+    print('TEst ----- ${sumNeutralPower}');
+    print('TEst ----- ${sumNegativePower}');
+    return Container(
+      width: double.infinity,
+      clipBehavior: Clip.hardEdge,
+      height: 36,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(32.0),
+      ),
+      child: Row(
+        children: [
+          AnimatedContainer(
+            width: positiveWidthFactor * (MediaQuery.of(context).size.width - 32),
+            duration: AppConstants.duration200,
+            child: Container(
+              color: AppColors.orange,
             ),
-            AnimatedContainer(
-              width: grayWidthFactor * (MediaQuery.of(context).size.width - 32),
-              duration: AppConstants.duration200,
-              child: Container(
-                color: AppColors.gray,
-              ),
+          ),
+          AnimatedContainer(
+            width: neutralWidthFactor * (MediaQuery.of(context).size.width - 32),
+            duration: AppConstants.duration200,
+            child: Container(
+              color: AppColors.gray,
             ),
-            AnimatedContainer(
-              width: blueWidthFactor * (MediaQuery.of(context).size.width - 32),
-              duration: AppConstants.duration200,
-              child: Container(
-                color: AppColors.blue,
-              ),
+          ),
+          AnimatedContainer(
+            width: negativeWidthFactor * (MediaQuery.of(context).size.width - 32),
+            duration: AppConstants.duration200,
+            child: Container(
+              color: AppColors.blue,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
