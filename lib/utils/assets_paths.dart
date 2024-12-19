@@ -19,6 +19,8 @@ abstract class AppImages {
   static const negative = "assets/images/negative.png";
 
   static const tl_empty = "assets/images/tl_empty.png";
+  static const empty_bar = "assets/images/empty_bar.png";
+  static const checked_in = "assets/images/checked_in.png";
 
 
 

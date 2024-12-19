@@ -31,6 +31,7 @@ class CheckInBloc extends Cubit<CheckIn> {
   }
 
   void updateFeelingPower(double value) {
+    print('qqqq----------- ${value}');
     final newValue = (value * 4) + 1;
     emit(state.copyWith(feelingPower: newValue.toInt()));
   }

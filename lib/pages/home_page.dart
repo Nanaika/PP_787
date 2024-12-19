@@ -1,9 +1,12 @@
+import 'package:PP_787/bloc/emotions_bloc.dart';
+import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/assets_paths.dart';
@@ -31,9 +34,22 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 16,
                 ),
-                // Bar(
-                //   items: [],
-                // ),
+                BlocSelector<EmotionsBloc, EmotionsState, List<CheckIn>>(
+                  selector: (state) {
+                    return state.allCheckIns;
+                  },
+                  builder: (context, state) {
+                    final now = DateUtils.dateOnly(DateTime.now());
+
+                    final monthly = state.where((elem) {
+                      return elem.date.month == now.month && elem.date.year == now.year;
+                    }).toList();
+
+                    return Bar(
+                      items: monthly,
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -183,6 +199,8 @@ class Bar extends StatefulWidget {
 class _BarState extends State<Bar> {
   @override
   Widget build(BuildContext context) {
+
+
     final sumPositivePower = widget.items.fold(0, (prev, item) {
       if (item.feeling == FeelingType.Positive) {
         return prev + item.feelingPower;
@@ -211,48 +229,60 @@ class _BarState extends State<Bar> {
     if (totalPower > 0) {
       positiveWidthFactor = sumPositivePower / totalPower.toDouble();
     }
-    if(totalPower > 0) {
+    if (totalPower > 0) {
       neutralWidthFactor = sumNeutralPower / totalPower.toDouble();
     }
-    if(totalPower > 0) {
+    if (totalPower > 0) {
       negativeWidthFactor = sumNegativePower / totalPower.toDouble();
     }
-    print('TEST pos -------------------${positiveWidthFactor}');
-    print('TEST nut -------------------${neutralWidthFactor}');
-    print('TEST nega -------------------${negativeWidthFactor}');
-
-    print('TEst ----- ${sumPositivePower}');
-    print('TEst ----- ${sumNeutralPower}');
-    print('TEst ----- ${sumNegativePower}');
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       clipBehavior: Clip.hardEdge,
       height: 36,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32.0),
       ),
-      child: Row(
+      child: Stack(
         children: [
-          AnimatedContainer(
-            width: positiveWidthFactor * (MediaQuery.of(context).size.width - 32),
-            duration: AppConstants.duration200,
-            child: Container(
-              color: AppColors.orange,
-            ),
+          Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width - 32,
+                clipBehavior: Clip.hardEdge,
+                height: 36,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(AppImages.empty_bar), fit: BoxFit.fitWidth),
+                  borderRadius: BorderRadius.circular(32.0),
+                ),
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: Text(
+                    'No data yet',
+                    style: AppStyles.bodyMedium,
+                  ),
+                ),
+              ),
+            ],
           ),
-          AnimatedContainer(
-            width: neutralWidthFactor * (MediaQuery.of(context).size.width - 32),
-            duration: AppConstants.duration200,
-            child: Container(
-              color: AppColors.gray,
-            ),
-          ),
-          AnimatedContainer(
-            width: negativeWidthFactor * (MediaQuery.of(context).size.width - 32),
-            duration: AppConstants.duration200,
-            child: Container(
-              color: AppColors.blue,
-            ),
+          Row(
+            children: [
+              AnimatedContainer(
+                color: AppColors.orange,
+                width: positiveWidthFactor * (MediaQuery.of(context).size.width - 32),
+                duration: AppConstants.duration200,
+              ),
+              AnimatedContainer(
+                color: AppColors.gray,
+                width: neutralWidthFactor * (MediaQuery.of(context).size.width - 32),
+                duration: AppConstants.duration200,
+              ),
+              AnimatedContainer(
+                color: AppColors.blue,
+                width: negativeWidthFactor * (MediaQuery.of(context).size.width - 32),
+                duration: AppConstants.duration200,
+              ),
+            ],
           ),
         ],
       ),

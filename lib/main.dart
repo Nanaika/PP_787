@@ -4,6 +4,7 @@ import 'package:PP_787/pages/add_emotion_page.dart';
 import 'package:PP_787/pages/add_trigger_page.dart';
 import 'package:PP_787/pages/anchor_page.dart';
 import 'package:PP_787/pages/check_in_page.dart';
+import 'package:PP_787/pages/checked_in_page.dart';
 import 'package:PP_787/pages/edit_trigger_page.dart';
 import 'package:PP_787/pages/exercise_page.dart';
 import 'package:PP_787/pages/home_page.dart';
@@ -124,6 +125,10 @@ class MyApp extends StatelessWidget {
           AppRoutes.timeLine => CupertinoPageRoute(
             settings: settings,
             builder: (context) => const TimeLinePage(),
+          ),
+          AppRoutes.checkedIn => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => const CheckedInPage(),
           ),
 
           _ => null,

@@ -86,9 +86,24 @@ class _TimeLinePageState extends State<TimeLinePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: StatsBar(
-                        items: [],
-                        title: 'Your month',
+                      child: BlocSelector<EmotionsBloc, EmotionsState, List<CheckIn>>(
+                        selector: (state) {
+                          return state.allCheckIns;
+                        },
+                        builder: (context, state) {
+                          final selectedDate = context.read<EmotionsBloc>().state.date;
+
+
+
+                          final monthly = state.where((elem) {
+                            return elem.date.month == selectedDate.month && elem.date.year ==selectedDate.year;
+                          }).toList();
+
+                          return StatsBar(
+                            items: monthly,
+                            title: 'Your month',
+                          );
+                        },
                       ),
                     ),
                     SizedBox(
@@ -103,15 +118,14 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         builder: (context, state) {
                           final selectedDate = context.read<EmotionsBloc>().state.date;
 
-                          final startOfWeek = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
-                          DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
 
-                          final weekly = state.where((elem) {
-                            return elem.date.isAfter(startOfWeek) && elem.date.isBefore(endOfWeek);
+
+                          final yearly = state.where((elem) {
+                            return elem.date.year == selectedDate.year;
                           }).toList();
 
                           return StatsBar(
-                            items: weekly,
+                            items: yearly,
                             title: 'Your year',
                           );
                         },

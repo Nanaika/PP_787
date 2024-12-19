@@ -1,5 +1,5 @@
 import 'package:PP_787/bloc/check_in_bloc.dart';
-import 'package:PP_787/bloc/emotions_bloc.dart';
+import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/trigger.dart';
@@ -193,12 +193,8 @@ class _CheckInPageState extends State<CheckInPage> {
                             buttonText: 'Submit',
                             onTap: () {
                               final checkIn = context.read<CheckInBloc>().state;
-                              context.read<EmotionsBloc>().addCheckIn(checkIn);
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                              }
+                              Navigator.of(context).pushNamed(AppRoutes.checkedIn, arguments: checkIn);
                             },
-                            // isActive: true,
                             isActive: context.read<CheckInBloc>().canSave(),
                           );
                         },

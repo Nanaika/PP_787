@@ -12,4 +12,5 @@ abstract class AppRoutes {
   static const exercise = '/exercise';
   static const checkIn = '/checkIn';
   static const timeLine = '/timeLine';
+  static const checkedIn = '/checkedIn';
 }
