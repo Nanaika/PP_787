@@ -1,9 +1,9 @@
+import 'package:PP_787/storages/models/anchor.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:equatable/equatable.dart';
 
-import '../storages/models/anchor.dart';
 
 class EmotionsState extends Equatable {
   const EmotionsState({
@@ -12,7 +12,7 @@ class EmotionsState extends Equatable {
     required this.exercises,
     required this.checkIns,
     required this.date,
-    required this.allCheckIns
+    required this.allCheckIns,
   });
 
   final List<Anchor> anchors;

@@ -48,7 +48,6 @@ class _ExercisePageState extends State<ExercisePage> {
   int _currentPage = 0;
 
   Future<void> _nextPage() async {
-    print('nextpage ------------------  ${_currentPage}');
     if (_currentPage == 5) {
     } else {
       setState(() => _currentPage++);
@@ -96,13 +95,13 @@ class _ExercisePageState extends State<ExercisePage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 32,
                 ),
                 Expanded(
                   child: PageView(
                     controller: _controller,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
                       SingleChildScrollView(
                         child: FirstView(
@@ -149,14 +148,14 @@ class _ExercisePageState extends State<ExercisePage> {
                           },
                         );
                       })
-                    ],
+                    ,],
                   ),
                 ),
               ],
             ),
           ),
         );
-      }),
+      },),
     );
   }
 }
@@ -175,7 +174,7 @@ class FirstView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          Row(
+          const Row(
             children: [
               Expanded(
                 child: FittedBox(
@@ -187,7 +186,7 @@ class FirstView extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           BlocSelector<ExerciseBloc, Exercise, List<String>>(
@@ -199,7 +198,7 @@ class FirstView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
                   if (index % 2 != 0) {
-                    return SizedBox(
+                    return const SizedBox(
                       width: 32,
                     );
                   }
@@ -211,13 +210,13 @@ class FirstView extends StatelessWidget {
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Column(
             children: List.generate(5, (index) {
               if (index % 2 != 0) {
-                return SizedBox(
+                return const SizedBox(
                   height: 16,
                 );
               }
@@ -230,7 +229,7 @@ class FirstView extends StatelessWidget {
               );
             }),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           BlocBuilder<ExerciseBloc, Exercise>(
@@ -245,7 +244,7 @@ class FirstView extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).padding.top,
           )
-        ],
+        ,],
       ),
     );
   }
@@ -296,7 +295,7 @@ class QuestionView extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Expanded(
@@ -308,7 +307,7 @@ class QuestionView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           if (showTextField)
@@ -337,13 +336,13 @@ class QuestionView extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                offset: Offset(0, 4),
+                                offset: const Offset(0, 4),
                                 blurRadius: 16,
                                 color: AppColors.black.withOpacity(0.1),
                               ),
                             ],
                           ),
-                          child: Icon(
+                          child: const Icon(
                             CupertinoIcons.chevron_back,
                             size: 24,
                           ),
@@ -364,7 +363,7 @@ class QuestionView extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).padding.top,
           )
-        ],
+        ,],
       ),
     );
   }
@@ -417,7 +416,7 @@ class TopBar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: backPressed,
-          child: Container(
+          child: const SizedBox(
             width: 24,
             height: 24,
             child: Icon(
@@ -426,14 +425,14 @@ class TopBar extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 6,
         ),
         Text(
           title,
           style: AppStyles.displaySmall,
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],

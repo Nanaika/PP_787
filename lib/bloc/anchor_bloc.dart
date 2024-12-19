@@ -1,6 +1,6 @@
+import 'package:PP_787/storages/models/anchor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../storages/models/anchor.dart';
 
 class AnchorBloc extends Cubit<Anchor> {
   AnchorBloc()

@@ -23,7 +23,7 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final trigger = ModalRoute.of(context)?.settings.arguments as Trigger;
+    final trigger = ModalRoute.of(context)!.settings.arguments! as Trigger;
     return BlocProvider(
       create: (_) => TriggerBloc(trigger: trigger),
       child: Builder(
@@ -36,7 +36,6 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
@@ -47,30 +46,28 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(5, (index) {
                         if (index % 2 != 0) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 16,
                           );
                         }
                         return SafeArea(
-                          bottom: true,
                           top: false,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: List.generate(7, (innerIndex) {
                               if (innerIndex % 2 != 0) {
-                                return SizedBox(
+                                return const SizedBox(
                                   width: 16,
                                 );
                               }
                               final totalIndex = ((index ~/ 2) * 4) + (innerIndex ~/ 2);
-                              print('INDEX -------  $totalIndex');
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -84,15 +81,13 @@ class _AddEmotionPageState extends State<AddEmotionPage> {
                         );
                       }),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     AppElevatedButton(
                       buttonText: 'Submit',
                       onTap: () async {
-                        print('HASH-------------------${context.read<TriggerBloc>().hashCode}');
                         context.read<TriggerBloc>().updateEmotion(selected);
-                        print('HASH-------------------${context.read<TriggerBloc>().hashCode}');
                         final emotions = context.read<TriggerBloc>().state.emotions;
                         await context.read<EmotionsBloc>().updateEmotions(trigger.id, emotions);
 
@@ -137,14 +132,14 @@ class EmotionTile extends StatelessWidget {
 
               width: 65,
               height: 65,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent, width: 4),
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.surface,
                 boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                     blurRadius: 16,
                     color: AppColors.black.withOpacity(0.1),
                   ),
@@ -157,14 +152,14 @@ class EmotionTile extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
         Text(
           Emotions.values[totalIndex].name,
           style: AppStyles.bodyMedium,
         )
-      ],
+      ,],
     );
   }
 }

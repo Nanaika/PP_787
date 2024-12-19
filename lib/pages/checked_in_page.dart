@@ -13,7 +13,7 @@ class CheckedInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final checkIn = ModalRoute.of(context)?.settings.arguments as CheckIn;
+    final checkIn = ModalRoute.of(context)!.settings.arguments! as CheckIn;
     return Scaffold(
       body: Column(
         children: [
@@ -26,7 +26,7 @@ class CheckedInPage extends StatelessWidget {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Expanded(
@@ -64,7 +64,7 @@ class EmptyTriggersView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           children: [
             Expanded(
               child: Text(
@@ -74,7 +74,7 @@ class EmptyTriggersView extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         Expanded(
@@ -84,9 +84,9 @@ class EmptyTriggersView extends StatelessWidget {
                 width: double.infinity,
                 AppImages.checked_in,
                 fit: BoxFit.cover,
-              )),
+              ),),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         AppElevatedButton(

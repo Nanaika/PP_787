@@ -1,6 +1,6 @@
+import 'package:PP_787/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../utils/constants.dart';
 
 abstract class AppSharedPreferences {
   static late final SharedPreferences _instance;

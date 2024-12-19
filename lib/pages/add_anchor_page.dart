@@ -1,10 +1,10 @@
 import 'package:PP_787/bloc/anchor_bloc.dart';
 import 'package:PP_787/bloc/emotions_bloc.dart';
-import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/storages/models/anchor.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/ui_kit/widgets/app_elevated_button.dart';
 import 'package:PP_787/ui_kit/widgets/app_text_form_field.dart';
+import 'package:PP_787/ui_kit/widgets/custom_app_bar.dart';
 import 'package:PP_787/utils/assets_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,62 +20,52 @@ class AddAnchorPage extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LayoutBuilder(
-                builder: (ctx, constrains) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: constrains.maxWidth, minHeight: constrains.maxHeight),
-                      child: IntrinsicHeight(
-                        child: GestureDetector(
-                          onTap: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
-                                child: TopBar(
-                                  title: 'Positivity anchors',
-                                  backPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                height: 32,
-                              ),
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(32),
-                                  child: Image.asset(
-                                    width: double.infinity,
-                                    AppImages.anchor2,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 32,
-                              ),
-                              Row(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              title: const CustomAppBar(title: 'Positivity anchors'),
+              automaticallyImplyLeading: false,
+            ),
+            body: GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(32),
+                                    child: Image.asset(
+                                      width: double.infinity,
+                                      AppImages.anchor2,
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 32,
+                                  ),
+                                  const Text(
+                                    textAlign: TextAlign.start,
                                     'Positivity anchor',
                                     style: AppStyles.labelMedium,
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
                                   SizedBox(
-                                    width: (MediaQuery.of(context).size.width / 2) - 32,
+                                    width: MediaQuery.of(context).size.width / 2,
                                     child: AppTextFormField(
                                       hint: 'A friend group brunch',
                                       onChanged: (text) {
@@ -84,12 +74,17 @@ class AddAnchorPage extends StatelessWidget {
                                       formatters: [LengthLimitingTextInputFormatter(50)],
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 32 + 54 + MediaQuery.of(context).padding.bottom,
+                                  ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 32,
-                              ),
-                              BlocBuilder<AnchorBloc, Anchor>(
+                            ),
+                            Positioned(
+                              bottom: 0  - MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                              left: 0,
+                              right: 0,
+                              child: BlocBuilder<AnchorBloc, Anchor>(
                                 builder: (context, state) {
                                   return AppElevatedButton(
                                     buttonText: 'Save anchor',
@@ -103,16 +98,13 @@ class AddAnchorPage extends StatelessWidget {
                                   );
                                 },
                               ),
-                              SizedBox(
-                                height: MediaQuery.of(context).padding.bottom,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  );
-                },
+                    ],
+                  ),
+                ),
               ),
             ),
           );

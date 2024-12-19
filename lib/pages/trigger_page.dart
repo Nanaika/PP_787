@@ -28,7 +28,7 @@ class TriggerPage extends StatelessWidget {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           BlocSelector<EmotionsBloc, EmotionsState, List<Trigger>>(
@@ -37,9 +37,9 @@ class TriggerPage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state.isEmpty) {
-                return Expanded(
+                return const Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: EmptyTriggersView(),
                   ),
                 );
@@ -66,9 +66,9 @@ class TriggerPage extends StatelessWidget {
                                 color: AppColors.secondary,
                               );
                             },
-                            itemCount: state.length),
+                            itemCount: state.length,),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       Padding(
@@ -77,7 +77,7 @@ class TriggerPage extends StatelessWidget {
                             buttonText: 'Add new trigger',
                             onTap: () {
                               Navigator.of(context).pushNamed(AppRoutes.addTrigger);
-                            }),
+                            },),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,
@@ -112,7 +112,7 @@ class TriggerTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 72,
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(color: index == 0 ? AppColors.secondary : Colors.transparent),
@@ -121,13 +121,13 @@ class TriggerTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 32,
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: (MediaQuery.of(context).size.width - 32) / 2
-              ),
+              ,),
               child: Text(
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -135,19 +135,18 @@ class TriggerTile extends StatelessWidget {
                 style: AppStyles.bodyMedium,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
                   children: List.generate(state[index].emotions.length, (innerIndex) {
                     return Container(
                       width: 60,
                       height: 60,
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: SvgPicture.asset(
                         AppIcons.triggerEmotionsIcons[state[index].emotions[innerIndex].type.index],
                       ),
@@ -156,7 +155,7 @@ class TriggerTile extends StatelessWidget {
                 ),
               ),
             )
-          ],
+          ,],
         ),
       ),
     );
@@ -173,13 +172,13 @@ class EmptyTriggersView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FittedBox(
+        const FittedBox(
           child: Text(
             'No triggers yet',
             style: AppStyles.displayLarge,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         Expanded(
@@ -188,16 +187,16 @@ class EmptyTriggersView extends StatelessWidget {
               child: Image.asset(
                 AppImages.trigger1,
                 fit: BoxFit.cover,
-              )),
+              ),),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         AppElevatedButton(
             buttonText: 'Next',
             onTap: () {
               Navigator.of(context).pushNamed(AppRoutes.addTrigger);
-            }),
+            },),
         SizedBox(
           height: MediaQuery.of(context).padding.bottom,
         ),

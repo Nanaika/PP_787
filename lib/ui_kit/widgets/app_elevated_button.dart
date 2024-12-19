@@ -1,8 +1,8 @@
+import 'package:PP_787/ui_kit/colors.dart';
+import 'package:PP_787/ui_kit/text_styles.dart';
+import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../utils/constants.dart';
-import '../colors.dart';
-import '../text_styles.dart';
 
 class AppElevatedButton extends StatelessWidget {
   const AppElevatedButton({
@@ -31,7 +31,7 @@ class AppElevatedButton extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
               blurRadius: 16,
               color: AppColors.black.withOpacity(0.1),
             ),

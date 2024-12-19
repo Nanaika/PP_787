@@ -1,4 +1,5 @@
 import 'package:PP_787/bloc/emotions_state.dart';
+import 'package:PP_787/storages/isar.dart';
 import 'package:PP_787/storages/models/anchor.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
@@ -6,17 +7,16 @@ import 'package:PP_787/storages/models/trigger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../storages/isar.dart';
 
 class EmotionsBloc extends Cubit<EmotionsState> {
   EmotionsBloc()
       : super(
           EmotionsState(
-            anchors: [],
-            triggers: [],
-            exercises: [],
-            checkIns: [],
-            allCheckIns: [],
+            anchors: const [],
+            triggers: const [],
+            exercises: const [],
+            checkIns: const [],
+            allCheckIns: const [],
             date: DateUtils.dateOnly(
               DateTime.now(),
             ),

@@ -42,9 +42,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
             },
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
+                padding: EdgeInsets.zero,
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top, left: 16, right: 16),
@@ -55,7 +54,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Padding(
@@ -68,7 +67,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                           final selectedDate = context.read<EmotionsBloc>().state.date;
 
                           final startOfWeek = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
-                          DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+                          final DateTime endOfWeek = startOfWeek.add(const Duration(days: 6));
 
                           final weekly = state.where((elem) {
                             return elem.date.isAfter(startOfWeek) && elem.date.isBefore(endOfWeek);
@@ -81,7 +80,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Padding(
@@ -106,7 +105,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Padding(
@@ -131,14 +130,14 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: CalendarView(),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Padding(
@@ -156,14 +155,14 @@ class _TimeLinePageState extends State<TimeLinePage> {
                               );
                             },
                           )
-                        ],
+                        ,],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
-                    CheckInsView(),
-                    ExercisesView(),
+                    const CheckInsView(),
+                    const ExercisesView(),
                     BlocBuilder<EmotionsBloc, EmotionsState>(builder: (ctx, state) {
                       if (state.checkIns.isEmpty && state.exercises.isEmpty) {
                         return Stack(
@@ -176,11 +175,11 @@ class _TimeLinePageState extends State<TimeLinePage> {
                                       child: Image.asset(
                                     AppImages.tl_empty,
                                     fit: BoxFit.fitWidth,
-                                  )),
+                                  ),),
                                 ],
                               ),
                             ),
-                            Positioned(
+                            const Positioned(
                               top: 45,
                               left: 0,
                               right: 0,
@@ -193,10 +192,10 @@ class _TimeLinePageState extends State<TimeLinePage> {
                           ],
                         );
                       } else {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
-                    }),
-                    SizedBox(
+                    },),
+                    const SizedBox(
                       height: 8,
                     ),
                     SizedBox(
@@ -241,11 +240,11 @@ class ExercisesView extends StatelessWidget {
                         selectedDateExecs: state,
                         outerIndex: outerIndex,
                       );
-                    });
+                    },);
               },
               child: Container(
                 height: 60,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: AppColors.secondary),
                   ),
@@ -260,7 +259,7 @@ class ExercisesView extends StatelessWidget {
                         return Container(
                           width: 4,
                           height: 4,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: AppColors.orange,
                           ),
@@ -270,7 +269,7 @@ class ExercisesView extends StatelessWidget {
                             child: Text(
                           state[outerIndex].words[innerIndex ~/ 2],
                           style: AppStyles.bodyMedium,
-                        ));
+                        ),);
                       }
                     }),
                   ),
@@ -301,8 +300,8 @@ class ExerciseView extends StatelessWidget {
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.secondary, width: 1))),
-          padding: EdgeInsets.symmetric(vertical: 7),
+          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.secondary))),
+          padding: const EdgeInsets.symmetric(vertical: 7),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -319,7 +318,7 @@ class ExerciseView extends StatelessWidget {
         ),
         Container(
           height: 60,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(color: AppColors.secondary),
             ),
@@ -335,7 +334,7 @@ class ExerciseView extends StatelessWidget {
                   return Container(
                     width: 4,
                     height: 4,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.orange,
                     ),
@@ -345,7 +344,7 @@ class ExerciseView extends StatelessWidget {
                       child: Text(
                     selectedDateExecs[outerIndex].words[innerIndex ~/ 2],
                     style: AppStyles.bodyMedium,
-                  ));
+                  ),);
                 }
               }),
             ),
@@ -356,8 +355,8 @@ class ExerciseView extends StatelessWidget {
             child: Column(
               children: List.generate(selectedDateExecs[outerIndex].answers.length, (index) {
                 return Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: const BoxDecoration(
                     border: Border(
                       bottom: BorderSide(color: AppColors.secondary),
                     ),
@@ -377,7 +376,7 @@ class ExerciseView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         Row(
@@ -438,7 +437,7 @@ class CheckInsView extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: AppColors.secondary),
+                  top: const BorderSide(color: AppColors.secondary),
                   bottom: BorderSide(color: index == state.length - 1 ? AppColors.secondary : Colors.transparent),
                 ),
               ),
@@ -446,14 +445,14 @@ class CheckInsView extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 16, right: 16),
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 50,
                       width: 50,
                       child: SvgPicture.asset(
                         assetPath,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Expanded(
@@ -472,7 +471,7 @@ class CheckInsView extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Row(
@@ -490,13 +489,13 @@ class CheckInsView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Container(
                       height: 50,
                       width: 50,
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(shape: BoxShape.circle, color: powerColor),
                       child: Center(
                         child: FittedBox(
@@ -530,28 +529,28 @@ class CalendarView extends StatelessWidget {
         return state.date;
       },
       builder: (BuildContext context, DateTime state) {
-        final nextMonth = DateTime(state.year, state.month + 1, 1);
-        final firstDayWeekDay = DateTime(state.year, state.month, 1).weekday;
+        final nextMonth = DateTime(state.year, state.month + 1,);
+        final firstDayWeekDay = DateTime(state.year, state.month,).weekday;
         final daysCount = nextMonth.subtract(const Duration(days: 1)).day;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              DateRow(),
-              SizedBox(height: 32),
+              const DateRow(),
+              const SizedBox(height: 32),
               Column(
                 children: List.generate(11, (outerIndex) {
                   if (outerIndex % 2 != 0) {
-                    return SizedBox(
+                    return const SizedBox(
                       height: 8,
                     );
                   }
                   return Row(
                     children: List.generate(13, (innerIndex) {
-                      final firstDayOfMonth = DateTime(state.year, state.month, 1); // Первый день месяца
+                      final firstDayOfMonth = DateTime(state.year, state.month,); // Первый день месяца
                       final firstDayWeekday = firstDayOfMonth.weekday;
                       if (innerIndex % 2 != 0) {
-                        return SizedBox(
+                        return const SizedBox(
                           width: 8,
                         );
                       }
@@ -564,7 +563,7 @@ class CalendarView extends StatelessWidget {
                       final dayNumber = (outerIndex ~/ 2 * 7) + (innerIndex ~/ 2 - (firstDayWeekDay - 1)) + 1;
 
                       if (dayNumber > daysCount) {
-                        return SizedBox.shrink();
+                        return const SizedBox.shrink();
                       }
                       final dayOfWeek = (firstDayWeekday + dayNumber - 1) % 7;
                       return CalendarTile(
@@ -618,7 +617,7 @@ class CalendarTile extends StatelessWidget {
           border: Border.all(color: isToday ? AppColors.primary : Colors.transparent, width: 2),
           boxShadow: [
             BoxShadow(
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
               blurRadius: 16,
               color: AppColors.black.withOpacity(0.1),
             ),
@@ -630,7 +629,7 @@ class CalendarTile extends StatelessWidget {
         child: Center(
           child: FittedBox(
             child: Text(
-              '${dayNumber}',
+              '$dayNumber',
               style: isSelected ? AppStyles.bodyMedium.copyWith(color: AppColors.white) : AppStyles.bodyMedium,
             ),
           ),
@@ -671,10 +670,10 @@ class _DateRowState extends State<DateRow> {
                     color: Colors.transparent,
                     width: 24,
                     height: 24,
-                    child: Icon(CupertinoIcons.chevron_back),
+                    child: const Icon(CupertinoIcons.chevron_back),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 FittedBox(
@@ -684,7 +683,7 @@ class _DateRowState extends State<DateRow> {
                     style: AppStyles.displaySmall,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
@@ -696,7 +695,7 @@ class _DateRowState extends State<DateRow> {
                     color: Colors.transparent,
                     width: 24,
                     height: 24,
-                    child: Icon(CupertinoIcons.chevron_forward),
+                    child: const Icon(CupertinoIcons.chevron_forward),
                   ),
                 ),
               ],
@@ -712,10 +711,10 @@ class _DateRowState extends State<DateRow> {
                     color: Colors.transparent,
                     width: 24,
                     height: 24,
-                    child: Icon(CupertinoIcons.chevron_back),
+                    child: const Icon(CupertinoIcons.chevron_back),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Text(
@@ -723,7 +722,7 @@ class _DateRowState extends State<DateRow> {
                   DateFormat('yyyy').format(state),
                   style: AppStyles.displaySmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 GestureDetector(
@@ -735,7 +734,7 @@ class _DateRowState extends State<DateRow> {
                     color: Colors.transparent,
                     width: 24,
                     height: 24,
-                    child: Icon(CupertinoIcons.chevron_forward),
+                    child: const Icon(CupertinoIcons.chevron_forward),
                   ),
                 ),
               ],
@@ -767,9 +766,9 @@ class StatsBar extends StatelessWidget {
               title,
               style: AppStyles.bodyMedium,
             )
-          ],
+          ,],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Bar(

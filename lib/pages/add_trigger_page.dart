@@ -1,8 +1,6 @@
-import 'package:PP_787/bloc/anchor_bloc.dart';
 import 'package:PP_787/bloc/emotions_bloc.dart';
 import 'package:PP_787/bloc/trigger_bloc.dart';
 import 'package:PP_787/pages/settings_page.dart';
-import 'package:PP_787/storages/models/anchor.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/ui_kit/widgets/app_elevated_button.dart';
@@ -35,7 +33,6 @@ class AddTriggerPage extends StatelessWidget {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
@@ -46,7 +43,7 @@ class AddTriggerPage extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 32,
                               ),
                               Expanded(
@@ -59,22 +56,21 @@ class AddTriggerPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 32,
                               ),
-                              Row(
+                              const Row(
                                 children: [
                                   Text(
                                     'Trigger name',
                                     style: AppStyles.labelMedium,
                                   )
-                                ],
+                                ,],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SizedBox(
                                     width: (MediaQuery.of(context).size.width / 2) - 32,
@@ -88,7 +84,7 @@ class AddTriggerPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 32,
                               ),
                               BlocBuilder<TriggerBloc, Trigger>(

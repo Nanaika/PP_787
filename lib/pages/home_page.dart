@@ -4,12 +4,12 @@ import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
+import 'package:PP_787/utils/assets_paths.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../utils/assets_paths.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -27,11 +27,11 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 14 + MediaQuery.of(context).padding.top,
                 ),
-                Text(
+                const Text(
                   'Your wellbeing this month',
                   style: AppStyles.displaySmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 BlocSelector<EmotionsBloc, EmotionsState, List<CheckIn>>(
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Expanded(
@@ -63,17 +63,16 @@ class HomePage extends StatelessWidget {
                 child: Row(
                   children: List.generate(3, (index) {
                     if (index % 2 != 0) {
-                      return SizedBox(
+                      return const SizedBox(
                         width: 16,
                       );
                     }
                     return SafeArea(
-                      bottom: true,
                       top: false,
                       child: Column(
                         children: List.generate(5, (innerIndex) {
                           if (innerIndex % 2 != 0) {
-                            return SizedBox(
+                            return const SizedBox(
                               height: 16,
                             );
                           }
@@ -153,11 +152,11 @@ class CategoryTile extends StatelessWidget {
             Container(
               width: (MediaQuery.of(context).size.width - 16 - 40) / 2,
               height: (MediaQuery.of(context).size.width - 16 - 40) / 2,
-              padding: EdgeInsets.all(32),
+              padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                     blurRadius: 16,
                     color: AppColors.black.withOpacity(0.1),
                   ),
@@ -170,14 +169,14 @@ class CategoryTile extends StatelessWidget {
                 fit: BoxFit.scaleDown,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Text(
               text,
               style: AppStyles.bodyMedium,
             )
-          ],
+          ,],
         ),
       ),
     );
@@ -251,11 +250,11 @@ class _BarState extends State<Bar> {
                 clipBehavior: Clip.hardEdge,
                 height: 36,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(AppImages.empty_bar), fit: BoxFit.fitWidth),
+                  image: const DecorationImage(image: AssetImage(AppImages.empty_bar), fit: BoxFit.fitWidth),
                   borderRadius: BorderRadius.circular(32.0),
                 ),
               ),
-              Positioned.fill(
+              const Positioned.fill(
                 child: Center(
                   child: Text(
                     'No data yet',

@@ -22,7 +22,7 @@ class SettingsPage extends StatelessWidget {
               },),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Expanded(
@@ -32,23 +32,22 @@ class SettingsPage extends StatelessWidget {
                 child: Row(
                   children: List.generate(3, (index) {
                     if (index % 2 != 0) {
-                      return SizedBox(
+                      return const SizedBox(
                         width: 16,
                       );
                     }
                     return SafeArea(
-                      bottom: true,
                       top: false,
                       child: Column(
                         children: List.generate(5, (innerIndex) {
                           if (innerIndex % 2 != 0) {
-                            return SizedBox(
+                            return const SizedBox(
                               height: 16,
                             );
                           }
                           return CategoryTile(
                               assetPath: AppIcons.settingsIcons[(index ~/ 2) + innerIndex],
-                              text: AppConstants.settingsCategories[(index ~/ 2) + innerIndex]);
+                              text: AppConstants.settingsCategories[(index ~/ 2) + innerIndex],);
                         }),
                       ),
                     );
@@ -76,18 +75,18 @@ class TopBar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: backPressed,
-          child: Container(
+          child: const SizedBox(
             width: 24,
             height: 24,
             child: Icon(CupertinoIcons.chevron_back, size: 24,),
           ),
         ),
-        SizedBox(width: 6,),
+        const SizedBox(width: 6,),
         Text(
           title,
           style: AppStyles.displaySmall,
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],

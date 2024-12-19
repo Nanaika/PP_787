@@ -45,7 +45,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         children: [
           Positioned.fill(
             child: PageView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               children: List.generate(3, (index) {
                 return OnboardingView(
@@ -68,19 +68,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     children: List.generate(
                       5,
                       (index) {
-                        if (index % 2 == 0) {
+                        if (index.isEven) {
                           return OnboardingChip(
                             isActive: currentPage >= index ~/ 2,
                           );
                         } else {
-                          return SizedBox(
+                          return const SizedBox(
                             width: 8,
                           );
                         }
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   AppElevatedButton(
@@ -128,7 +128,7 @@ class OnboardingView extends StatelessWidget {
             ),
           ),
         )
-      ],
+      ,],
     );
   }
 }

@@ -9,14 +9,14 @@ class ExerciseBloc extends Cubit<Exercise> {
         );
 
   void updateWord(String text, int index) {
-    text = text.trim();
+    text.trim();
     final copy = state.words.toList();
     copy[index] = text;
     emit(state.copyWith(words: copy));
   }
 
   void updateAnswer(String text, int index) {
-    text = text.trim();
+    text.trim();
     final copy = state.answers.toList();
     copy[index] = text;
     emit(state.copyWith(answers: copy));

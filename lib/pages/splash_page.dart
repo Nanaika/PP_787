@@ -1,9 +1,9 @@
+import 'package:PP_787/navigation/routes.dart';
+import 'package:PP_787/remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:in_app_review/in_app_review.dart';
 
-import '../navigation/routes.dart';
-import '../remote_config.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key, required this.isFirstRun});

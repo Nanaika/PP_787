@@ -1,4 +1,5 @@
 import 'package:PP_787/bloc/emotions_bloc.dart';
+import 'package:PP_787/navigation/routes.dart';
 import 'package:PP_787/pages/add_anchor_page.dart';
 import 'package:PP_787/pages/add_emotion_page.dart';
 import 'package:PP_787/pages/add_trigger_page.dart';
@@ -16,26 +17,28 @@ import 'package:PP_787/pages/trigger_page.dart';
 import 'package:PP_787/remote_config.dart';
 import 'package:PP_787/storages/isar.dart';
 import 'package:PP_787/storages/shared_preferences.dart';
+import 'package:PP_787/ui_kit/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_info/flutter_app_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_app_info/flutter_app_info.dart';
-
-import 'navigation/routes.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Color.fromARGB(1, 1, 1, 1),
       systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark));
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
 
   await RemoteConfigService.init();
   await AppSharedPreferences.init();
@@ -69,8 +72,11 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(backgroundColor: AppColors.background),
+          scaffoldBackgroundColor: AppColors.background,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
@@ -79,65 +85,63 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: (settings) => switch (settings.name) {
           AppRoutes.onBoarding => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const OnboardingPage(),
-          ),
+              settings: settings,
+              builder: (context) => const OnboardingPage(),
+            ),
           AppRoutes.home => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const HomePage(),
-          ),
+              settings: settings,
+              builder: (context) => const HomePage(),
+            ),
           AppRoutes.settings => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const SettingsPage(),
-          ),
+              settings: settings,
+              builder: (context) => const SettingsPage(),
+            ),
           AppRoutes.anchor => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const AnchorPage(),
-          ),
+              settings: settings,
+              builder: (context) => const AnchorPage(),
+            ),
           AppRoutes.addAnchor => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const AddAnchorPage(),
-          ),
+              settings: settings,
+              builder: (context) => const AddAnchorPage(),
+            ),
           AppRoutes.trigger => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const TriggerPage(),
-          ),
+              settings: settings,
+              builder: (context) => const TriggerPage(),
+            ),
           AppRoutes.addTrigger => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const AddTriggerPage(),
-          ),
+              settings: settings,
+              builder: (context) => const AddTriggerPage(),
+            ),
           AppRoutes.editTrigger => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const EditTriggerPage(),
-          ),
+              settings: settings,
+              builder: (context) => const EditTriggerPage(),
+            ),
           AppRoutes.addEmotion => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const AddEmotionPage(),
-          ),
+              settings: settings,
+              builder: (context) => const AddEmotionPage(),
+            ),
           AppRoutes.exercise => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const ExercisePage(),
-          ),
+              settings: settings,
+              builder: (context) => const ExercisePage(),
+            ),
           AppRoutes.checkIn => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const CheckInPage(),
-          ),
+              settings: settings,
+              builder: (context) => const CheckInPage(),
+            ),
           AppRoutes.timeLine => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const TimeLinePage(),
-          ),
+              settings: settings,
+              builder: (context) => const TimeLinePage(),
+            ),
           AppRoutes.checkedIn => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => const CheckedInPage(),
-          ),
-
+              settings: settings,
+              builder: (context) => const CheckedInPage(),
+            ),
           _ => null,
         },
         home: SplashPage(
-        isFirstRun: isFirstRun,
-      ),),
+          isFirstRun: isFirstRun,
+        ),
+      ),
     );
   }
 }
-
-

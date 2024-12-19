@@ -12,7 +12,6 @@ class TriggerBloc extends Cubit<Trigger> {
     emit(state.copyWith(name: text));
   }
   void updateEmotion(int index) {
-    print('TEEEEEEE---------------------- ${state.emotions.length}');
     final copy = state.emotions.toList();
     final isExist = copy.any((elem) => elem.type.index == index);
     if(isExist) {
@@ -24,9 +23,6 @@ class TriggerBloc extends Cubit<Trigger> {
     }
     emit(state.copyWith(emotions: copy));
     for(int i = 0; i < state.emotions.length; i++) {
-
-    print('TEST -----------  ${state.emotions[i].type.name}');
-    print('TEST -----------  ${state.emotions[i].count}');
     }
 
   }

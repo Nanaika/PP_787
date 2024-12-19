@@ -17,7 +17,7 @@ class EditTriggerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = ModalRoute.of(context)?.settings.arguments as int;
+    final index = ModalRoute.of(context)!.settings.arguments! as int;
 
     return Scaffold(
       body: Column(
@@ -31,7 +31,7 @@ class EditTriggerPage extends StatelessWidget {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           BlocSelector<EmotionsBloc, EmotionsState, List<Trigger>>(
@@ -61,9 +61,9 @@ class EditTriggerPage extends StatelessWidget {
                                 style: AppStyles.displayLarge,
                               ),
                             )
-                          ],
+                          ,],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 32,
                         ),
                         Flexible(
@@ -72,13 +72,12 @@ class EditTriggerPage extends StatelessWidget {
                               children: List.generate(state[index].emotions.length + state[index].emotions.length - 1,
                                   (rowIndex) {
                                 if (rowIndex % 2 != 0) {
-                                  return SizedBox(
+                                  return const SizedBox(
                                     height: 32,
                                   );
                                 }
 
                                 int max = state[index].emotions.reduce((a, b) => a.count > b.count ? a : b).count;
-                                print("MAX________________---${max}");
                                 for (int i = 0; i < state[index].emotions.length; i++) {
                                   if (state[index].emotions[i].count > max) {
                                     max = state[index].emotions[i].count;
@@ -90,21 +89,21 @@ class EditTriggerPage extends StatelessWidget {
                                     Column(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
+                                          width: 65,
+                                          height: 65,
                                           child: SvgPicture.asset(
                                             AppIcons
                                                 .triggerEmotionsIcons[state[index].emotions[rowIndex ~/ 2].type.index],
                                           ),
-                                          width: 65,
-                                          height: 65,
                                         ),
                                         Text(
                                           Emotions.values[state[index].emotions[rowIndex ~/ 2].type.index].name,
                                           style: AppStyles.bodyMedium,
                                         )
-                                      ],
+                                      ,],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 16,
                                     ),
                                     Expanded(
@@ -122,7 +121,7 @@ class EditTriggerPage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 16,
                                     ),
                                     Text(
@@ -135,7 +134,7 @@ class EditTriggerPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 32,
                         ),
                         AppElevatedButton(
@@ -144,20 +143,19 @@ class EditTriggerPage extends StatelessWidget {
                             buttonText: 'New emotion in the trigger',
                             onTap: () {
                               Navigator.of(context).pushNamed(AppRoutes.addEmotion, arguments: state[index]);
-                            }),
-                        SizedBox(
+                            },),
+                        const SizedBox(
                           height: 16,
                         ),
                         AppElevatedButton(
                             backgroundColor: AppColors.destructive,
-                            textColor: AppColors.white,
                             buttonText: 'Delete trigger',
                             onTap: () async {
                               await context.read<EmotionsBloc>().deleteTrigger(state[index].id);
                               if (context.mounted) {
                                 Navigator.of(context).pop();
                               }
-                            }),
+                            },),
                         SizedBox(
                           height: 10 + MediaQuery.of(context).padding.bottom,
                         ),
@@ -190,13 +188,13 @@ class EmptyView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FittedBox(
+        const FittedBox(
           child: Text(
             'No records in this\ntrigger yet',
             style: AppStyles.displayLarge,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         Expanded(
@@ -205,16 +203,16 @@ class EmptyView extends StatelessWidget {
               child: Image.asset(
                 AppImages.trigger3,
                 fit: BoxFit.cover,
-              )),
+              ),),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         AppElevatedButton(
             buttonText: 'New emotion in the trigger',
             onTap: () {
               Navigator.of(context).pushNamed(AppRoutes.addEmotion, arguments: trigger);
-            }),
+            },),
         SizedBox(
           height: MediaQuery.of(context).padding.bottom,
         ),

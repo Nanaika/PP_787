@@ -39,7 +39,6 @@ class _CheckInPageState extends State<CheckInPage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
@@ -50,7 +49,7 @@ class _CheckInPageState extends State<CheckInPage> {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       BlocSelector<CheckInBloc, CheckIn, bool>(
@@ -59,8 +58,10 @@ class _CheckInPageState extends State<CheckInPage> {
                         },
                         builder: (BuildContext context, bool outerState) {
                           return IndexedStack(
-                              index: outerState ? 1 : 0,
-                              children: List.generate(2, (index) {
+                            index: outerState ? 1 : 0,
+                            children: List.generate(
+                              2,
+                              (index) {
                                 return BlocSelector<CheckInBloc, CheckIn, int>(
                                   selector: (CheckIn state) {
                                     return state.index;
@@ -75,10 +76,12 @@ class _CheckInPageState extends State<CheckInPage> {
                                     );
                                   },
                                 );
-                              }));
+                              },
+                            ),
+                          );
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       BlocSelector<CheckInBloc, CheckIn, bool>(
@@ -96,24 +99,24 @@ class _CheckInPageState extends State<CheckInPage> {
                           );
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Generally this feeling is',
                             style: AppStyles.bodyMedium,
                           )
-                        ],
+                        ,],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       Row(
                         children: List.generate(5, (index) {
                           if (index % 2 != 0) {
-                            return SizedBox(
+                            return const SizedBox(
                               width: 20,
                             );
                           }
@@ -133,18 +136,18 @@ class _CheckInPageState extends State<CheckInPage> {
                           );
                         }),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'How strong is that feeling',
                             style: AppStyles.bodyMedium,
                           )
-                        ],
+                        ,],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       Row(
@@ -161,21 +164,21 @@ class _CheckInPageState extends State<CheckInPage> {
                                     : 0,
                               );
                             },
-                          )),
+                          ),),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'What was this emotion triggered by',
                             style: AppStyles.bodyMedium,
                           )
-                        ],
+                        ,],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       AppTextFormField(
@@ -184,7 +187,7 @@ class _CheckInPageState extends State<CheckInPage> {
                           context.read<CheckInBloc>().updateTriggerBy(text);
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       BlocBuilder<CheckInBloc, CheckIn>(
@@ -263,12 +266,12 @@ class FeelingTile extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           height: 60,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(color: selected ? AppColors.primary : Colors.transparent, width: 4),
             boxShadow: [
               BoxShadow(
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
                 blurRadius: 16,
                 color: AppColors.black.withOpacity(0.1),
               ),
@@ -277,7 +280,7 @@ class FeelingTile extends StatelessWidget {
                 image: AssetImage(
                   AppImages.feelings[index ~/ 2],
                 ),
-                fit: BoxFit.cover),
+                fit: BoxFit.cover,),
             borderRadius: BorderRadius.circular(16.0),
           ),
           duration: AppConstants.duration200,
@@ -285,7 +288,7 @@ class FeelingTile extends StatelessWidget {
               child: Text(
             feelings[index ~/ 2],
             style: AppStyles.bodyMedium.copyWith(color: AppColors.white),
-          )),
+          ),),
         ),
       ),
     );
@@ -312,18 +315,17 @@ class EmotionsTilesGroup extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(5, (index) {
             if (index % 2 != 0) {
-              return SizedBox(
+              return const SizedBox(
                 height: 16,
               );
             }
             return SafeArea(
-              bottom: true,
               top: false,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(7, (innerIndex) {
                   if (innerIndex % 2 != 0) {
-                    return SizedBox(
+                    return const SizedBox(
                       width: 16,
                     );
                   }
@@ -347,18 +349,18 @@ class EmotionsTilesGroup extends StatelessWidget {
         if (isCustom)
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Row(
+              const Row(
                 children: [
                   Text(
                     'Name that emotion',
                     style: AppStyles.labelMedium,
                   )
-                ],
+                ,],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               BlocSelector<CheckInBloc, CheckIn, String>(
@@ -404,14 +406,14 @@ class EmotionTile extends StatelessWidget {
             AnimatedContainer(
               width: 65,
               height: 65,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent, width: 4),
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.surface,
                 boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 4),
+                    offset: const Offset(0, 4),
                     blurRadius: 16,
                     color: AppColors.black.withOpacity(0.1),
                   ),
@@ -425,7 +427,7 @@ class EmotionTile extends StatelessWidget {
           ],
         ),
         if (!isCustom)
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
         if (!isCustom)

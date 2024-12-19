@@ -1,6 +1,6 @@
+import 'package:PP_787/ui_kit/colors.dart';
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
 
 abstract class AppStyles {
   static const displayLarge = TextStyle(
@@ -18,7 +18,7 @@ abstract class AppStyles {
     fontSize: 26,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
-    letterSpacing: -1,
+
   );
 
   static const bodyMedium = TextStyle(
@@ -27,7 +27,7 @@ abstract class AppStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
-    letterSpacing: -1,
+
   );
   static const labelMedium = TextStyle(
     fontFamily: 'sf',
@@ -35,7 +35,7 @@ abstract class AppStyles {
     fontSize: 10,
     fontWeight: FontWeight.w400,
     color: AppColors.black,
-    letterSpacing: -1,
+
   );
 
 }
