@@ -1,5 +1,6 @@
 import 'package:PP_787/pages/home_page.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
+import 'package:PP_787/ui_kit/widgets/custom_app_bar.dart';
 import 'package:PP_787/utils/assets_paths.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,17 +12,9 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const CustomAppBar(title: 'Settings'), automaticallyImplyLeading: false,),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Padding(
-              padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
-              child: TopBar(title: 'Settings', backPressed: () {
-                Navigator.of(context).pop();
-              },),
-            ),
-          ),
           const SizedBox(
             height: 32,
           ),

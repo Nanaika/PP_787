@@ -35,7 +35,6 @@ class ExerciseBloc extends Cubit<Exercise> {
     if (state.answers[index] == '') {
       return false;
     }
-
     return true;
   }
 }

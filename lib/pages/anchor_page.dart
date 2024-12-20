@@ -21,14 +21,14 @@ class AnchorPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.background,
         automaticallyImplyLeading: false,
-        title: const CustomAppBar(title: 'Positivity anchors',),
+        title: const CustomAppBar(
+          title: 'Positivity anchors',
+        ),
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-
-
             BlocSelector<EmotionsBloc, EmotionsState, List<Anchor>>(
               selector: (state) {
                 return state.anchors;
@@ -49,7 +49,7 @@ class AnchorPage extends StatelessWidget {
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           itemBuilder: (ctx, index) {
-                            if(index == state.length) {
+                            if (index == state.length) {
                               return SizedBox(
                                 height: 32 + 54 + MediaQuery.of(context).padding.bottom,
                               );
@@ -98,9 +98,9 @@ class AnchorPage extends StatelessWidget {
                           bottom: 0,
                           left: 0,
                           right: 0,
-
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16, right: 16, bottom: MediaQuery.of(context).padding.bottom),
+                            padding:
+                                EdgeInsets.only(left: 16, right: 16, bottom: MediaQuery.of(context).padding.bottom),
                             child: AppElevatedButton(
                               buttonText: 'Add anchor',
                               onTap: () {
@@ -109,7 +109,6 @@ class AnchorPage extends StatelessWidget {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   );
@@ -123,8 +122,6 @@ class AnchorPage extends StatelessWidget {
   }
 }
 
-
-
 class EmptyAnchorsView extends StatelessWidget {
   const EmptyAnchorsView({
     super.key,
@@ -137,7 +134,9 @@ class EmptyAnchorsView extends StatelessWidget {
         SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 32,),
+              const SizedBox(
+                height: 32,
+              ),
               Stack(
                 children: [
                   ClipRRect(

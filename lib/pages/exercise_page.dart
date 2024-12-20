@@ -6,6 +6,7 @@ import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/ui_kit/widgets/app_elevated_button.dart';
 import 'package:PP_787/ui_kit/widgets/app_text_form_field.dart';
+import 'package:PP_787/ui_kit/widgets/custom_app_bar.dart';
 import 'package:PP_787/utils/assets_paths.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,10 +22,10 @@ const colors = [
 ];
 
 const questions = [
-  'When did you feel\nthe same thing?',
-  'How would you\ndescribe this to\nanother person',
-  'How does this\nemotion influence\nyour actions',
-  'Where do you feel\nthis emotion in\nyour body',
+  'When did you feel the same thing?',
+  'How would you describe this to another person',
+  'How does this emotion influence your actions',
+  'Where do you feel this emotion in your body',
   'Reflection complete',
 ];
 
@@ -74,88 +75,136 @@ class _ExercisePageState extends State<ExercisePage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ExerciseBloc(),
-      child: Builder(builder: (context) {
-        return GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Scaffold(
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top),
-                    child: TopBar(
-                      title: 'Reflection exercise',
-                      backPressed: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                Expanded(
-                  child: PageView(
-                    controller: _controller,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      SingleChildScrollView(
-                        child: FirstView(
-                          onTap: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            _nextPage();
-                          },
-                        ),
+      child: Builder(
+        builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: const CustomAppBar(title: 'Reflection exercise'),
+              ),
+              body: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          PageView(
+                            controller: _controller,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              SingleChildScrollView(
+                                child: FirstView(
+                                  onTap: () {
+                                    FocusManager.instance.primaryFocus?.unfocus();
+                                    _nextPage();
+                                  },
+                                ),
+                              ),
+                              ...List.generate(questions.length, (index) {
+                                return BlocSelector<ExerciseBloc, Exercise, List<String>>(
+                                  selector: (Exercise state) {
+                                    return state.answers;
+                                  },
+                                  builder: (BuildContext context, List<String> state) {
+                                    return QuestionView(
+                                      showTextField: index != questions.length - 1,
+                                      question: questions[index],
+                                      onChanged: (text) {
+                                        context.read<ExerciseBloc>().updateAnswer(text, index);
+                                      },
+                                      imagePath: questionsImages[index],
+                                      isActive: false,
+                                      onTap: () {},
+                                    );
+                                  },
+                                );
+                              }),
+                            ],
+                          ),
+                          if (_currentPage > 0)
+                            Positioned(
+                              bottom:
+                                  0 - MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                              left: 0,
+                              right: 0,
+                              child: BlocBuilder<ExerciseBloc, Exercise>(
+                                builder: (BuildContext context, Exercise state) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Row(
+                                      children: [
+                                        if (_currentPage > 1)
+                                          GestureDetector(
+                                            onTap: () {
+                                              FocusManager.instance.primaryFocus?.unfocus();
+                                              _prevPage();
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 16.0),
+                                              child: Container(
+                                                height: 54,
+                                                width: 54,
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.secondary,
+                                                  shape: BoxShape.circle,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      offset: const Offset(0, 4),
+                                                      blurRadius: 16,
+                                                      color: AppColors.black.withOpacity(0.1),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: const Icon(
+                                                  CupertinoIcons.chevron_back,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        AnimatedContainer(
+                                          duration: AppConstants.duration200,
+                                          child: Expanded(
+                                            child: AppElevatedButton(
+                                              onTap: () {
+                                                if (_currentPage == 5) {
+                                                  FocusManager.instance.primaryFocus?.unfocus();
+                                                  final exercise = context.read<ExerciseBloc>().state;
+                                                  context.read<EmotionsBloc>().addExercise(exercise);
+                                                  Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+                                                } else {
+                                                  FocusManager.instance.primaryFocus?.unfocus();
+                                                  _nextPage();
+                                                }
+                                              },
+                                              isActive: _currentPage - 1 == questions.length - 1
+                                                  ? true
+                                                  : context.read<ExerciseBloc>().canAnswerNext(_currentPage - 1),
+                                              buttonText: _currentPage == 5 ? 'Submit' : 'Next',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
                       ),
-                      ...List.generate(questions.length, (index) {
-                        return BlocSelector<ExerciseBloc, Exercise, List<String>>(
-                          selector: (Exercise state) {
-                            return state.answers;
-                          },
-                          builder: (BuildContext context, List<String> state) {
-                            return QuestionView(
-                              showBackButton: index != 0,
-                              showTextField: index != questions.length - 1,
-                              question: questions[index],
-                              onChanged: (text) {
-                                context.read<ExerciseBloc>().updateAnswer(text, index);
-                              },
-                              onBackTap: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                _prevPage();
-                              },
-                              onTap: () {
-                                if (_currentPage == 5) {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  final exercise = context.read<ExerciseBloc>().state;
-                                  context.read<EmotionsBloc>().addExercise(exercise);
-                                  Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-                                } else {
-                                  FocusManager.instance.primaryFocus?.unfocus();
-                                  _nextPage();
-                                }
-                              },
-                              imagePath: questionsImages[index],
-                              isActive: index == questions.length - 1
-                                  ? true
-                                  : context.read<ExerciseBloc>().canAnswerNext(index),
-                              buttonText: index == 4 ? 'Submit' : 'Next',
-                            );
-                          },
-                        );
-                      })
-                    ,],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        );
-      },),
+          );
+        },
+      ),
     );
   }
 }
@@ -174,14 +223,15 @@ class FirstView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
+          const SizedBox(
+            height: 32,
+          ),
           const Row(
             children: [
               Expanded(
-                child: FittedBox(
-                  child: Text(
-                    'Describe what you\nfeel in three words',
-                    style: AppStyles.displayLarge,
-                  ),
+                child: Text(
+                  'Describe what you feel in three words',
+                  style: AppStyles.displayLarge,
                 ),
               ),
             ],
@@ -234,24 +284,23 @@ class FirstView extends StatelessWidget {
           ),
           BlocBuilder<ExerciseBloc, Exercise>(
             builder: (BuildContext context, Exercise state) {
-              return AppElevatedButton(
-                buttonText: 'Next',
-                onTap: onTap,
-                isActive: context.read<ExerciseBloc>().canWordsNext(),
+              return Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                child: AppElevatedButton(
+                  buttonText: 'Next',
+                  onTap: onTap,
+                  isActive: context.read<ExerciseBloc>().canWordsNext(),
+                ),
               );
             },
           ),
-          SizedBox(
-            height: MediaQuery.of(context).padding.top,
-          )
-        ,],
+        ],
       ),
     );
   }
 }
 
-//TODO
-class QuestionView extends StatelessWidget {
+class QuestionView extends StatefulWidget {
   const QuestionView({
     super.key,
     required this.onTap,
@@ -278,95 +327,61 @@ class QuestionView extends StatelessWidget {
   final void Function(String) onChanged;
 
   @override
+  State<QuestionView> createState() => _QuestionViewState();
+}
+
+class _QuestionViewState extends State<QuestionView> with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: FittedBox(
-                  child: Text(
-                    question,
-                    style: AppStyles.displayLarge,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          Expanded(
-            child: ClipRRect(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 32,
+            ),
+            Text(
+              textAlign: TextAlign.left,
+              widget.question,
+              style: AppStyles.displayLarge,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            ClipRRect(
               borderRadius: BorderRadius.circular(32),
               child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+                width: double.infinity,
+                widget.imagePath,
+                fit: BoxFit.fitWidth,
               ),
             ),
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          if (showTextField)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: AppTextFormField(
-                hint: 'Describe the situation',
-                onChanged: onChanged,
-                formatters: [LengthLimitingTextInputFormatter(50)],
-              ),
+            const SizedBox(
+              height: 32,
             ),
-          BlocBuilder<ExerciseBloc, Exercise>(
-            builder: (BuildContext context, Exercise state) {
-              return Row(
-                children: [
-                  if (showBackButton)
-                    GestureDetector(
-                      onTap: onBackTap,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Container(
-                          height: 54,
-                          width: 54,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: const Offset(0, 4),
-                                blurRadius: 16,
-                                color: AppColors.black.withOpacity(0.1),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            CupertinoIcons.chevron_back,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                  Expanded(
-                    child: AppElevatedButton(
-                      buttonText: buttonText,
-                      onTap: onTap,
-                      isActive: isActive,
-                    ),
+            if (widget.showTextField)
+              BlocSelector<ExerciseBloc, Exercise, List<String>>(
+                selector: (state) { return state.answers; },
+                builder: (BuildContext context, state) { return Padding(
+                  padding: EdgeInsets.only(bottom: 54 + 32 + MediaQuery.of(context).padding.bottom),
+                  child: AppTextFormField(
+                    hint: 'Describe the situation',
+                    onChanged: widget.onChanged,
+                    formatters: [LengthLimitingTextInputFormatter(50)],
                   ),
-                ],
-              );
-            },
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).padding.top,
-          )
-        ,],
+                ); },
+              ),
+          ],
+        ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class CustomCircle extends StatefulWidget {
@@ -395,47 +410,6 @@ class _CustomCircleState extends State<CustomCircle> {
         border: Border.all(color: widget.color, width: widget.isActive ? 0 : 4),
       ),
       duration: AppConstants.duration200,
-    );
-  }
-}
-
-class TopBar extends StatelessWidget {
-  const TopBar({
-    super.key,
-    required this.title,
-    this.backPressed,
-  });
-
-  final String title;
-  final void Function()? backPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: backPressed,
-          child: const SizedBox(
-            width: 24,
-            height: 24,
-            child: Icon(
-              CupertinoIcons.chevron_back,
-              size: 24,
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 6,
-        ),
-        Text(
-          title,
-          style: AppStyles.displaySmall,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-      ],
     );
   }
 }

@@ -28,6 +28,7 @@ class AppElevatedButton extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: AnimatedContainer(
         duration: AppConstants.duration200,
+
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

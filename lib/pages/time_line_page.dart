@@ -1,12 +1,12 @@
 import 'package:PP_787/bloc/emotions_bloc.dart';
 import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/pages/home_page.dart';
-import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/storages/models/check_in.dart';
 import 'package:PP_787/storages/models/exercise.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
+import 'package:PP_787/ui_kit/widgets/custom_app_bar.dart';
 import 'package:PP_787/utils/assets_paths.dart';
 import 'package:PP_787/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,6 +36,10 @@ class _TimeLinePageState extends State<TimeLinePage> {
     return Builder(
       builder: (context) {
         return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const CustomAppBar(title: 'Timeline'),
+          ),
           body: GestureDetector(
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
@@ -45,17 +49,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top, left: 16, right: 16),
-                      child: TopBar(
-                        title: 'Timeline',
-                        backPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
                     const SizedBox(
-                      height: 32,
+                      height: 24,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -92,10 +87,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         builder: (context, state) {
                           final selectedDate = context.read<EmotionsBloc>().state.date;
 
-
-
                           final monthly = state.where((elem) {
-                            return elem.date.month == selectedDate.month && elem.date.year ==selectedDate.year;
+                            return elem.date.month == selectedDate.month && elem.date.year == selectedDate.year;
                           }).toList();
 
                           return StatsBar(
@@ -116,8 +109,6 @@ class _TimeLinePageState extends State<TimeLinePage> {
                         },
                         builder: (context, state) {
                           final selectedDate = context.read<EmotionsBloc>().state.date;
-
-
 
                           final yearly = state.where((elem) {
                             return elem.date.year == selectedDate.year;
@@ -154,47 +145,52 @@ class _TimeLinePageState extends State<TimeLinePage> {
                                 style: AppStyles.displaySmall,
                               );
                             },
-                          )
-                        ,],
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(
                       height: 32,
                     ),
                     const CheckInsView(),
-                    const ExercisesView(),
-                    BlocBuilder<EmotionsBloc, EmotionsState>(builder: (ctx, state) {
-                      if (state.checkIns.isEmpty && state.exercises.isEmpty) {
-                        return Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
+                     ExercisesView(
+                      isDrawTopDivider: context.read<EmotionsBloc>().state.checkIns.isEmpty,
+                    ),
+                    BlocBuilder<EmotionsBloc, EmotionsState>(
+                      builder: (ctx, state) {
+                        if (state.checkIns.isEmpty && state.exercises.isEmpty) {
+                          return Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
                                       child: Image.asset(
-                                    AppImages.tl_empty,
-                                    fit: BoxFit.fitWidth,
-                                  ),),
-                                ],
+                                        AppImages.tl_empty,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Positioned(
-                              top: 45,
-                              left: 0,
-                              right: 0,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                'No data yet',
-                                style: AppStyles.displaySmall,
+                              const Positioned(
+                                top: 45,
+                                left: 0,
+                                right: 0,
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  'No data yet',
+                                  style: AppStyles.displaySmall,
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },),
+                            ],
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
                     const SizedBox(
                       height: 8,
                     ),
@@ -216,9 +212,9 @@ class _TimeLinePageState extends State<TimeLinePage> {
 
 class ExercisesView extends StatelessWidget {
   const ExercisesView({
-    super.key,
+    super.key, this.isDrawTopDivider = false,
   });
-
+  final bool isDrawTopDivider;
   @override
   Widget build(BuildContext context) {
     return BlocSelector<EmotionsBloc, EmotionsState, List<Exercise>>(
@@ -232,21 +228,24 @@ class ExercisesView extends StatelessWidget {
               onTap: () {
                 //TODO
                 showModalBottomSheet(
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (ctx) {
-                      return ExerciseView(
-                        selectedDateExecs: state,
-                        outerIndex: outerIndex,
-                      );
-                    },);
+                  useSafeArea: true,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (ctx) {
+                    return ExerciseView(
+                      selectedDateExecs: state,
+                      outerIndex: outerIndex,
+
+                    );
+                  },
+                );
               },
               child: Container(
                 height: 60,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.secondary),
+                    bottom: const BorderSide(color: AppColors.secondary),
+                    top: outerIndex == 0 && isDrawTopDivider ? const BorderSide(color: AppColors.secondary) : BorderSide.none,
                   ),
                 ),
                 child: Padding(
@@ -256,20 +255,27 @@ class ExercisesView extends StatelessWidget {
                     children: List.generate(state[outerIndex].words.length + state[outerIndex].words.length - 1,
                         (innerIndex) {
                       if (innerIndex % 2 != 0) {
-                        return Container(
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.orange,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Container(
+                            width: 4,
+                            height: 4,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.orange,
+                            ),
                           ),
                         );
                       } else {
-                        return FittedBox(
-                            child: Text(
-                          state[outerIndex].words[innerIndex ~/ 2],
-                          style: AppStyles.bodyMedium,
-                        ),);
+                        return Expanded(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            state[outerIndex].words[innerIndex ~/ 2],
+                            style: AppStyles.bodyMedium,
+                          ),
+                        );
                       }
                     }),
                   ),
@@ -287,9 +293,9 @@ class ExerciseView extends StatelessWidget {
   const ExerciseView({
     super.key,
     required this.selectedDateExecs,
-    required this.outerIndex,
+    required this.outerIndex, this.isTop = false,
   });
-
+  final bool isTop;
   final List<Exercise> selectedDateExecs;
   final int outerIndex;
 
@@ -318,33 +324,41 @@ class ExerciseView extends StatelessWidget {
         ),
         Container(
           height: 60,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: AppColors.secondary),
+              bottom: const BorderSide(color: AppColors.secondary),
+              top: isTop ? const BorderSide(color: AppColors.secondary) : BorderSide.none,
             ),
           ),
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 16, right: 16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                   selectedDateExecs[outerIndex].words.length + selectedDateExecs[outerIndex].words.length - 1,
                   (innerIndex) {
                 if (innerIndex % 2 != 0) {
-                  return Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.orange,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
+                      width: 4,
+                      height: 4,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.orange,
+                      ),
                     ),
                   );
                 } else {
-                  return FittedBox(
-                      child: Text(
-                    selectedDateExecs[outerIndex].words[innerIndex ~/ 2],
-                    style: AppStyles.bodyMedium,
-                  ),);
+                  return Expanded(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      selectedDateExecs[outerIndex].words[innerIndex ~/ 2],
+                      style: AppStyles.bodyMedium,
+                    ),
+                  );
                 }
               }),
             ),
@@ -529,8 +543,14 @@ class CalendarView extends StatelessWidget {
         return state.date;
       },
       builder: (BuildContext context, DateTime state) {
-        final nextMonth = DateTime(state.year, state.month + 1,);
-        final firstDayWeekDay = DateTime(state.year, state.month,).weekday;
+        final nextMonth = DateTime(
+          state.year,
+          state.month + 1,
+        );
+        final firstDayWeekDay = DateTime(
+          state.year,
+          state.month,
+        ).weekday;
         final daysCount = nextMonth.subtract(const Duration(days: 1)).day;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -547,7 +567,10 @@ class CalendarView extends StatelessWidget {
                   }
                   return Row(
                     children: List.generate(13, (innerIndex) {
-                      final firstDayOfMonth = DateTime(state.year, state.month,); // Первый день месяца
+                      final firstDayOfMonth = DateTime(
+                        state.year,
+                        state.month,
+                      ); // Первый день месяца
                       final firstDayWeekday = firstDayOfMonth.weekday;
                       if (innerIndex % 2 != 0) {
                         return const SizedBox(
@@ -765,8 +788,8 @@ class StatsBar extends StatelessWidget {
             Text(
               title,
               style: AppStyles.bodyMedium,
-            )
-          ,],
+            ),
+          ],
         ),
         const SizedBox(
           height: 16,

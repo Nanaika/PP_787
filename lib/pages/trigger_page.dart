@@ -1,11 +1,11 @@
 import 'package:PP_787/bloc/emotions_bloc.dart';
 import 'package:PP_787/bloc/emotions_state.dart';
 import 'package:PP_787/navigation/routes.dart';
-import 'package:PP_787/pages/settings_page.dart';
 import 'package:PP_787/storages/models/trigger.dart';
 import 'package:PP_787/ui_kit/colors.dart';
 import 'package:PP_787/ui_kit/text_styles.dart';
 import 'package:PP_787/ui_kit/widgets/app_elevated_button.dart';
+import 'package:PP_787/ui_kit/widgets/custom_app_bar.dart';
 import 'package:PP_787/utils/assets_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,20 +17,12 @@ class TriggerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const CustomAppBar(title: 'Emotional trigger map'),
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 14 + MediaQuery.of(context).padding.top, left: 16, right: 16),
-            child: TopBar(
-              title: 'Emotional trigger map',
-              backPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-          const SizedBox(
-            height: 32,
-          ),
           BlocSelector<EmotionsBloc, EmotionsState, List<Trigger>>(
             selector: (state) {
               return state.triggers;
@@ -49,24 +41,25 @@ class TriggerPage extends StatelessWidget {
                     children: [
                       Flexible(
                         child: ListView.separated(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (ctx, index) {
-                              return TriggerTile(
-                                index: index,
-                                state: state,
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(AppRoutes.editTrigger, arguments: index);
-                                },
-                              );
-                            },
-                            separatorBuilder: (ctx, index) {
-                              return Container(
-                                height: 1,
-                                color: AppColors.secondary,
-                              );
-                            },
-                            itemCount: state.length,),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (ctx, index) {
+                            return TriggerTile(
+                              index: index,
+                              state: state,
+                              onTap: () {
+                                Navigator.of(context).pushNamed(AppRoutes.editTrigger, arguments: index);
+                              },
+                            );
+                          },
+                          separatorBuilder: (ctx, index) {
+                            return Container(
+                              height: 1,
+                              color: AppColors.secondary,
+                            );
+                          },
+                          itemCount: state.length,
+                        ),
                       ),
                       const SizedBox(
                         height: 32,
@@ -74,10 +67,11 @@ class TriggerPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: AppElevatedButton(
-                            buttonText: 'Add new trigger',
-                            onTap: () {
-                              Navigator.of(context).pushNamed(AppRoutes.addTrigger);
-                            },),
+                          buttonText: 'Add new trigger',
+                          onTap: () {
+                            Navigator.of(context).pushNamed(AppRoutes.addTrigger);
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,
@@ -126,8 +120,8 @@ class TriggerTile extends StatelessWidget {
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: (MediaQuery.of(context).size.width - 32) / 2
-              ,),
+                maxWidth: (MediaQuery.of(context).size.width - 32) / 2,
+              ),
               child: Text(
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
@@ -154,8 +148,8 @@ class TriggerTile extends StatelessWidget {
                   }),
                 ),
               ),
-            )
-          ,],
+            ),
+          ],
         ),
       ),
     );
@@ -169,36 +163,49 @@ class EmptyTriggersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        const FittedBox(
-          child: Text(
-            'No triggers yet',
-            style: AppStyles.displayLarge,
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 32,
+              ),
+              const Text(
+                'No triggers yet',
+                style: AppStyles.displayLarge,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: Image.asset(
+                  width: double.infinity,
+                  AppImages.trigger1,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              SizedBox(
+                height: 32 + 54 + MediaQuery.of(context).padding.bottom,
+              ),
+            ],
           ),
         ),
-        const SizedBox(
-          height: 32,
-        ),
-        Expanded(
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
-              child: Image.asset(
-                AppImages.trigger1,
-                fit: BoxFit.cover,
-              ),),
-        ),
-        const SizedBox(
-          height: 32,
-        ),
-        AppElevatedButton(
-            buttonText: 'Next',
-            onTap: () {
-              Navigator.of(context).pushNamed(AppRoutes.addTrigger);
-            },),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom,
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            child: AppElevatedButton(
+              buttonText: 'Next',
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoutes.addTrigger);
+              },
+            ),
+          ),
         ),
       ],
     );

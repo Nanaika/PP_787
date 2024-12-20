@@ -53,72 +53,77 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            height: 32,
-          ),
+
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: List.generate(3, (index) {
-                    if (index % 2 != 0) {
-                      return const SizedBox(
-                        width: 16,
-                      );
-                    }
-                    return SafeArea(
-                      top: false,
-                      child: Column(
-                        children: List.generate(5, (innerIndex) {
-                          if (innerIndex % 2 != 0) {
-                            return const SizedBox(
-                              height: 16,
-                            );
-                          }
-                          return CategoryTile(
-                            assetPath: AppIcons.mainPageIcons[(index ~/ 2) + innerIndex],
-                            text: AppConstants.mainCategories[(index ~/ 2) + innerIndex],
-                            onTap: () {
-                              switch ((index ~/ 2) + innerIndex) {
-                                case 0:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.checkIn);
-                                    break;
-                                  }
-                                case 1:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.timeLine);
-                                    break;
-                                  }
-                                case 2:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.trigger);
-                                    break;
-                                  }
-                                case 3:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.exercise);
-                                    break;
-                                  }
-                                case 4:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.anchor);
-                                    break;
-                                  }
-                                case 5:
-                                  {
-                                    Navigator.of(context).pushNamed(AppRoutes.settings);
-                                    break;
-                                  }
-                              }
-                            },
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: List.generate(3, (index) {
+                        if (index % 2 != 0) {
+                          return const SizedBox(
+                            width: 16,
                           );
-                        }),
-                      ),
-                    );
-                  }),
-                ),
+                        }
+                        return SafeArea(
+                          top: false,
+                          child: Column(
+                            children: List.generate(5, (innerIndex) {
+                              if (innerIndex % 2 != 0) {
+                                return const SizedBox(
+                                  height: 16,
+                                );
+                              }
+                              return CategoryTile(
+                                assetPath: AppIcons.mainPageIcons[(index ~/ 2) + innerIndex],
+                                text: AppConstants.mainCategories[(index ~/ 2) + innerIndex],
+                                onTap: () {
+                                  switch ((index ~/ 2) + innerIndex) {
+                                    case 0:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.checkIn);
+                                        break;
+                                      }
+                                    case 1:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.timeLine);
+                                        break;
+                                      }
+                                    case 2:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.trigger);
+                                        break;
+                                      }
+                                    case 3:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.exercise);
+                                        break;
+                                      }
+                                    case 4:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.anchor);
+                                        break;
+                                      }
+                                    case 5:
+                                      {
+                                        Navigator.of(context).pushNamed(AppRoutes.settings);
+                                        break;
+                                      }
+                                  }
+                                },
+                              );
+                            }),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
